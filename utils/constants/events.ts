@@ -1,0 +1,1 @@
+export const DEBUG_MODE_CHANGE = "CLIENT::DEBUG_MODE";

@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location as LocationService } from "@angular/common";
+import { ElectronService } from "../../../providers/electron.service";
+import { DEBUG_MODE_CHANGE } from "../../../../../utils/constants/events";
 
 @Component({
   selector: "app-layout",
@@ -19,7 +21,16 @@ export class LayoutComponent implements OnInit {
     return !!(history && history.length > 1);
   }
 
-  constructor(private location: LocationService, private router: Router, private route: ActivatedRoute) {}
+  private get renderer() {
+    return this.electron.ipcRenderer;
+  }
+
+  constructor(
+    private location: LocationService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private electron: ElectronService
+  ) {}
 
   ngOnInit() {
     console.log(history);
@@ -31,5 +42,9 @@ export class LayoutComponent implements OnInit {
 
   onBackClick() {
     this.location.back();
+  }
+
+  onDebugClick() {
+    this.renderer.send(DEBUG_MODE_CHANGE, {});
   }
 }

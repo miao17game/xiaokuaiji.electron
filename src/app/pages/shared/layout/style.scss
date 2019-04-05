@@ -18,9 +18,16 @@ $font-main-color: #fff;
   .router-link {
     cursor: pointer;
     padding: 8px;
+    padding-right: 20px;
+    padding-left: 20px;
     color: $font-main-color;
     text-decoration: none;
+    line-height: 32px;
     transition: background-color 0.5s;
+
+    span {
+      font-size: 14px;
+    }
 
     &:focus {
       outline: none;
@@ -50,6 +57,8 @@ $font-main-color: #fff;
 
       .back-button {
         cursor: pointer;
+        display: inline-block;
+        margin-right: 8px;
       }
     }
 
@@ -59,6 +68,8 @@ $font-main-color: #fff;
 
       .menu-button {
         cursor: pointer;
+        display: inline-block;
+        margin-left: 8px;
       }
     }
   }

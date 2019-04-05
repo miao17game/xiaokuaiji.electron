@@ -4,6 +4,7 @@
       <div *ngIf="canGoBack" class="back-button" (click)="onBackClick()">后退</div>
     </div>
     <div class="menu-group">
+      <div class="menu-button" (click)="onDebugClick()">调试</div>
       <div class="menu-button" (click)="onMenuClick()">{{ showMenu ? "收起" : "展开" }}</div>
     </div>
   </div>
@@ -18,7 +19,7 @@
         routerLinkActive="router-link-active"
         class="router-link"
       >
-        {{ eachUrl[1] }}
+        <span>{{ eachUrl[1] }}</span>
       </div>
     </div>
   </div>

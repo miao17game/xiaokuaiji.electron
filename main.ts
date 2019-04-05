@@ -1,6 +1,8 @@
-import { app, BrowserWindow, screen } from "electron";
+import { app, BrowserWindow, screen, ipcMain } from "electron";
 import * as path from "path";
 import * as url from "url";
+
+import { DEBUG_MODE_CHANGE } from "./utils/constants/events";
 
 let win: BrowserWindow, serve: boolean;
 const args = process.argv.slice(1);
@@ -23,13 +25,13 @@ function createWindow() {
 
   if (serve) {
     require("electron-reload")(__dirname, {
-      electron: require(`${__dirname}/node_modules/electron`)
+      electron: require("electron")
     });
     win.loadURL("http://localhost:4200");
   } else {
     win.loadURL(
       url.format({
-        pathname: path.join(__dirname, "dist/index.html"),
+        pathname: path.join(__dirname, "../dist/index.html"),
         protocol: "file:",
         slashes: true
       })
@@ -69,6 +71,15 @@ try {
     // dock icon is clicked and there are no other windows open.
     if (win === null) {
       createWindow();
+    }
+  });
+
+  ipcMain.on(DEBUG_MODE_CHANGE, (event, data) => {
+    const devToolOpened = win.webContents.isDevToolsOpened();
+    if (devToolOpened) {
+      win.webContents.closeDevTools();
+    } else {
+      win.webContents.openDevTools();
     }
   });
 } catch (e) {

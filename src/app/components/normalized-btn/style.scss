@@ -1,0 +1,24 @@
+.normalized-button {
+  padding: 8px 12px;
+  border: 1px solid #cdcdcd;
+  background-color: #fff;
+  color: #000;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.35s;
+
+  &:hover {
+    background-color: #fcfcfc;
+  }
+}
+
+.normalized-primary {
+  border: 1px solid #2374ee;
+  background-color: #2374ee;
+  color: #fff;
+
+  &:hover {
+    background-color: #4387ec;
+  }
+}
