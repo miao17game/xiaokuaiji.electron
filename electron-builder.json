@@ -3,7 +3,7 @@
   "directories": {
     "output": "release/"
   },
-  "files": ["build/**/*"],
+  "files": ["build/**/*", "dist/**/*"],
   "win": {
     "icon": "dist",
     "target": ["portable"]

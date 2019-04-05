@@ -9,10 +9,17 @@ dev-ng:
 	yarn run ng:serve
 
 start:
-	yarn run build:dev && npx electron ./main.js
+	rm -rf build
+	yarn start
 
 build-local:
+	rm -rf build
 	yarn run electron:local
 
 build-mac:
+	rm -rf build
 	yarn run electron:mac
+
+build-win:
+	rm -rf build
+	yarn run electron:windows
