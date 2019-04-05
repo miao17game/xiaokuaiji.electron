@@ -1,1 +1,10 @@
-<div>xxxxxxx</div>
+<div class="main">
+  <div *ngIf="data.exist">
+    <div *ngFor="let folder of data.folders">
+      <span>{{ folder.path }}</span>
+    </div>
+    <div *ngFor="let file of data.files">
+      <span>{{ file }}</span>
+    </div>
+  </div>
+</div>
