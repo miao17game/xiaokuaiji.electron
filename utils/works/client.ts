@@ -3,6 +3,11 @@ import { DEBUG_MODE_CHANGE, HOME_DIR_FILES_FETCH } from "../constants/events";
 import * as path from "path";
 import * as fs from "fs";
 
+export interface IFilesFetchContext {
+  childPath?: string;
+  showHideFiles?: boolean;
+}
+
 export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
   main.on(DEBUG_MODE_CHANGE, (event: Event, data) => {
     const devToolOpened = win.webContents.isDevToolsOpened();
@@ -12,11 +17,14 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
       win.webContents.openDevTools();
     }
   });
-  main.on(HOME_DIR_FILES_FETCH, (event: Event, { childPath = "Documents/xiaokuaiji", showHideFiles = false } = {}) => {
-    const homedir = require("os").homedir();
-    const folder = path.resolve(homedir, childPath || "");
-    event.sender.send(HOME_DIR_FILES_FETCH, { files: readFiles(folder, showHideFiles) });
-  });
+  main.on(
+    HOME_DIR_FILES_FETCH,
+    (event: Event, { childPath = "Documents/xiaokuaiji", showHideFiles = false }: IFilesFetchContext = {}) => {
+      const homedir = require("os").homedir();
+      const folder = path.resolve(homedir, childPath || "");
+      event.sender.send(HOME_DIR_FILES_FETCH, { files: readFiles(folder, showHideFiles) });
+    }
+  );
 }
 
 export interface IFileFetchResult {
