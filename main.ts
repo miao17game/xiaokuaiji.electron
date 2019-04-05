@@ -2,7 +2,7 @@ import { app, BrowserWindow, screen, ipcMain } from "electron";
 import * as path from "path";
 import * as url from "url";
 
-import { DEBUG_MODE_CHANGE } from "./utils/constants/events";
+import { clientEventsHook } from "./utils/works/client";
 
 let win: BrowserWindow, serve: boolean;
 const args = process.argv.slice(1);
@@ -74,14 +74,7 @@ try {
     }
   });
 
-  ipcMain.on(DEBUG_MODE_CHANGE, (event, data) => {
-    const devToolOpened = win.webContents.isDevToolsOpened();
-    if (devToolOpened) {
-      win.webContents.closeDevTools();
-    } else {
-      win.webContents.openDevTools();
-    }
-  });
+  clientEventsHook(win, ipcMain);
 } catch (e) {
   // Catch Error
   // throw e;
