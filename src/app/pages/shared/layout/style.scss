@@ -1,3 +1,10 @@
+$primary-color: #1f67d3;
+$primary-weak-color: #3477db;
+$hover-color: #f0ba55;
+$active-color: #1859bb;
+
+$font-main-color: #fff;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -11,17 +18,21 @@
   .router-link {
     cursor: pointer;
     padding: 8px;
-    color: #fff;
+    color: $font-main-color;
     text-decoration: none;
     transition: background-color 0.5s;
 
     &:focus {
       outline: none;
     }
+
+    &:hover {
+      background-color: $hover-color;
+    }
   }
 
   .router-link-active {
-    background-color: #808080;
+    background-color: $active-color;
     transition: background-color 0.5s;
   }
 
@@ -29,9 +40,10 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    background-color: #404040;
-    color: #fff;
+    background-color: $primary-color;
+    color: $font-main-color;
     padding: 20px;
+    box-shadow: 0px 1px 1px #acacac;
 
     .back-group {
       flex: 1;
@@ -63,8 +75,16 @@
     .right-section {
       flex: unset;
       width: 240px;
-      background-color: #404040;
-      color: #fff;
+      background-color: $primary-weak-color;
+      color: $font-main-color;
+      transition: 0.45s;
+    }
+
+    .no-display {
+      width: 0;
+      opacity: 0;
+      color: transparent;
+      transition: 0.25s;
     }
   }
 }

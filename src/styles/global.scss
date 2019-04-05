@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+// $dark-mode: #404040;
+// $light-mode: #ececec;
+
+.global-theme {
+  background-color: transparent;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+// .dark-theme {
+//   background-color: $dark-mode;
+// }
+
+// .light-theme {
+//   background-color: $light-mode;
+// }
