@@ -11,5 +11,8 @@ dev-ng:
 start:
 	yarn run build:dev && npx electron ./main.js
 
+build-local:
+	yarn run electron:local
+
 build-mac:
 	yarn run electron:mac
