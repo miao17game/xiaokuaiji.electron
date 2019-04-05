@@ -7,22 +7,23 @@ import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { AppRoutingModule } from "./router.module";
-import { ElectronService } from "./providers/electron.service";
-import { WebviewDirective } from "./components/webview.directive";
 import { AppComponent } from "./app.component";
-import { HomeComponent } from "./pages/home/home.component";
+import { ProvidersModule } from "./providers/providers.module";
+import { PagesModule } from "./pages/pages.module";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, WebviewDirective],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    ProvidersModule,
+    PagesModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -31,7 +32,6 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [ElectronService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

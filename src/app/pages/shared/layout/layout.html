@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="header">
+    <div class="back-group">
+      <div class="back-button"><</div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-button" (click)="onMenuClick()">MENU</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="section">
+      <ng-content></ng-content>
+    </div>
+    <div *ngIf="showMenu" class="section right-section">
+      <div class="router-link" routerLink="/home" routerLinkActive="router-link-active">
+        Home Page
+      </div>
+      <div class="router-link" routerLink="/main" routerLinkActive="router-link-active">
+        Main Page
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 100vh;
+
+  a {
+    cursor: pointer;
+  }
+
+  .router-link {
+    cursor: pointer;
+    padding: 8px;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.5s;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .router-link-active {
+    background-color: #808080;
+    transition: background-color 0.5s;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #404040;
+    color: #fff;
+    padding: 20px;
+
+    .back-group {
+      flex: 1;
+
+      .back-button {
+        cursor: pointer;
+      }
+    }
+
+    .menu-group {
+      flex: 1;
+      text-align: right;
+
+      .menu-button {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .main {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+
+    .section {
+      flex: 1;
+    }
+
+    .right-section {
+      flex: unset;
+      width: 240px;
+      background-color: #404040;
+      color: #fff;
+    }
+  }
+}

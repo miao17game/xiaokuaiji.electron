@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-home",
@@ -6,7 +7,12 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./style.scss"]
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  onCLick() {
+    console.log(this.router);
+    this.router.navigate(["main"]);
+  }
 }
