@@ -49,6 +49,8 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
+
+  clientEventsHook(win, ipcMain);
 }
 
 try {
@@ -73,8 +75,6 @@ try {
       createWindow();
     }
   });
-
-  clientEventsHook(win, ipcMain);
 } catch (e) {
   // Catch Error
   // throw e;
