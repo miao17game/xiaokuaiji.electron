@@ -2,15 +2,21 @@
   <ng-container *ngTemplateOutlet="folderComp; context: reference"></ng-container>
 </div>
 
-<ng-template #folderComp let-expanded="expanded" let-files="files" let-folders="folders" let-path="path">
-  <div class="folder-container" [ngClass]="{ 'folder-closed': !expanded }">
+<ng-template
+  #folderComp
+  let-expanded="expanded"
+  let-isroot="isRoot"
+  let-files="files"
+  let-folders="folders"
+  let-path="path"
+>
+  <div class="folder-container" [ngClass]="{ 'folder-closed': !expanded, 'folder-root': isroot }">
     <div class="file-group" *ngIf="files && files.length > 0">
-      <div *ngFor="let file of files" class="single-file">{{ file | childUrl: path }}</div>
+      <div *ngFor="let file of files" class="single-file" (click)="onFileTapped(file)">{{ file | childUrl: path }}</div>
     </div>
     <div class="folder-group" *ngIf="folders && folders.length > 0">
       <ng-container *ngFor="let folder of folders">
         <div class="single-folder" [ngClass]="{ opened: folder.expanded }" (click)="onExpanded(folder)">
-          <!-- <span class="expand-icon"></span> -->
           <icon type="angle-down" class="exp-icon"></icon>
           <span>{{ folder.path | childUrl: path }}</span>
         </div>
@@ -19,6 +25,6 @@
         </ng-container>
       </ng-container>
     </div>
-    <div *ngIf="!(files && files.length > 0) && !(folders && folders.length > 0)" class="no-file">&nbsp;</div>
+    <div *ngIf="!(files && files.length > 0) && !(folders && folders.length > 0)" class="no-file">folder is empty.</div>
   </div>
 </ng-template>

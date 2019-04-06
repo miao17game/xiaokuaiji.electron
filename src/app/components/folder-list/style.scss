@@ -10,7 +10,6 @@
   flex: 1;
   height: 100%;
   padding: 12px;
-  padding-left: 4px;
   box-sizing: border-box;
 
   .folder-container {
@@ -20,6 +19,8 @@
     padding-left: 8px;
     margin-bottom: 4px;
     box-sizing: border-box;
+    border: 1px solid #ececec;
+    border-bottom-width: 0;
     transition: 0.5s;
 
     .file-group {
@@ -29,6 +30,7 @@
       .single-file {
         line-height: 28px;
         background-color: transparent;
+        font-size: 14px;
       }
     }
 
@@ -36,6 +38,10 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      margin: -1px;
+      margin-bottom: 0;
+      border: 0px solid #ececec;
+      border-bottom-width: 1px;
 
       .single-folder {
         background-color: #f3f3f3;
@@ -58,7 +64,7 @@
 
       .opened {
         .exp-icon {
-          transform: rotate(180deg);
+          transform: rotate(180deg) translateY(-2px);
         }
       }
     }
@@ -67,7 +73,13 @@
       background-color: #fff;
       padding-top: 4px;
       padding-bottom: 4px;
+      color: #909090;
+      font-size: 14px;
     }
+  }
+
+  .folder-root {
+    padding-left: 0;
   }
 
   .folder-closed {

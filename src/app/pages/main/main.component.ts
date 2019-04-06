@@ -37,6 +37,10 @@ export class MainComponent implements OnInit, OnDestroy {
     this.renderer.send(HOME_DIR_FILES_FETCH, {});
   }
 
+  onFileSelect(path: string) {
+    console.log(path);
+  }
+
   ngOnDestroy(): void {
     this.renderer.removeAllListeners(HOME_DIR_FILES_FETCH);
   }
