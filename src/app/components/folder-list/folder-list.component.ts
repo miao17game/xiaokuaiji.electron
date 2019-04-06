@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from "@angular/core";
-import { IFileFetchResult } from "../../../../utils/works/client";
+import { IFolderStruct } from "../../../../utils/metadata";
 import { Source } from "webpack-sources";
 
 interface IViewContext {
@@ -17,8 +17,8 @@ interface IViewContext {
   styleUrls: ["./style.scss"]
 })
 export class FolderListComponent implements OnInit, OnChanges {
-  @Input() context: IFileFetchResult;
-  @Output() onFolderClick = new EventEmitter<IFileFetchResult>();
+  @Input() context: IFolderStruct;
+  @Output() onFolderClick = new EventEmitter<IFolderStruct>();
   @Output() onFileClick = new EventEmitter<string>();
 
   private viewContext: IViewContext = {
@@ -58,7 +58,7 @@ export class FolderListComponent implements OnInit, OnChanges {
   }
 }
 
-function buildViewContext(source: IFileFetchResult): IViewContext {
+function buildViewContext(source: IFolderStruct): IViewContext {
   return {
     exist: source.exist,
     path: source.path,
@@ -69,7 +69,7 @@ function buildViewContext(source: IFileFetchResult): IViewContext {
   };
 }
 
-function readFilesResult(source: IViewContext): IFileFetchResult {
+function readFilesResult(source: IViewContext): IFolderStruct {
   const { exist, path, files, folders } = source;
   return {
     exist,

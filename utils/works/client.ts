@@ -1,12 +1,9 @@
 import { ipcMain, BrowserWindow, Event } from "electron";
 import { ClientEvent } from "../constants/events";
 import { ROOT_FOLDER, PREFERENCE_CONF } from "../constants/paths";
+import { IFilesFetchContext, IFolderStruct as IFileFetchResult } from "../metadata";
 import * as path from "path";
 import * as fs from "fs";
-
-export interface IFilesFetchContext {
-  showHideFiles?: boolean;
-}
 
 export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
   main.on(ClientEvent.DebugMode, (event: Event, data) => {
@@ -41,13 +38,6 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
     }
     event.sender.send(ClientEvent.FetchPreferences, { configs: config, error });
   });
-}
-
-export interface IFileFetchResult {
-  exist: boolean;
-  path: string;
-  files: string[];
-  folders: IFileFetchResult[];
 }
 
 function readFiles(thisPath: string, showHideFiles = false) {

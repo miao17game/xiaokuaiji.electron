@@ -6,5 +6,7 @@ export enum ClientEvent {
   /** 初始化app的指定文件夹作为默认文件夹 */
   InitAppFolder = "CLIENT::INIT_APP_FOLDER",
   /** 获取当前应用的偏好设置 */
-  FetchPreferences = "CLIENT::FETCH_PREFERENCES_CONFIG"
+  FetchPreferences = "CLIENT::FETCH_PREFERENCES_CONFIG",
+  /** 更新当前应用的偏好设置 */
+  UpdatePreferences = "CLIENT::UPDATE_PREFERENCE_CONFIG"
 }

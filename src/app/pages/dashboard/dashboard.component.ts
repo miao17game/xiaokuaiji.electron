@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ElectronService } from "../../providers/electron.service";
 import { ClientEvent } from "../../../../utils/constants/events";
-import { IFileFetchResult } from "../../../../utils/works/client";
+import { IFolderStruct } from "../../../../utils/metadata";
 
 @Component({
   selector: "app-dashboard",
@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.electron.ipcRenderer;
   }
 
-  public data: IFileFetchResult = {
+  public data: IFolderStruct = {
     exist: true,
     path: "",
     files: [],
@@ -25,8 +25,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private electron: ElectronService) {}
 
   ngOnInit() {
-    this.ipc.send(ClientEvent.FetchFiles, {});
-    this.ipc.on(ClientEvent.FetchFiles, (_: any, { files }: { files: IFileFetchResult }) => {
+    this.ipc.send(ClientEvent.FetchFiles, { showHideFiles: false });
+    this.ipc.on(ClientEvent.FetchFiles, (_: any, { files }: { files: IFolderStruct }) => {
       this.data = files;
       this.loading = false;
     });
