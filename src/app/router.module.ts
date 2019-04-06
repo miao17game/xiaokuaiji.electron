@@ -17,15 +17,18 @@ const routes: Routes = [
       },
       {
         path: "home",
-        component: HomeComponent
+        component: HomeComponent,
+        data: { title: "首页" }
       },
       {
         path: "dashboard",
-        component: DashboardComponent
+        component: DashboardComponent,
+        data: { title: "操作台" }
       },
       {
         path: "preference",
-        component: PreferenceComponent
+        component: PreferenceComponent,
+        data: { title: "偏好设置" }
       }
     ]
   }
