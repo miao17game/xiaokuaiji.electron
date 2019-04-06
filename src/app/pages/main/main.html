@@ -1,3 +1,5 @@
 <div class="main" *ngIf="data">
-  <folder-list [context]="data"></folder-list>
+  <loading [show]="loading">
+    <folder-list [context]="data"></folder-list>
+  </loading>
 </div>

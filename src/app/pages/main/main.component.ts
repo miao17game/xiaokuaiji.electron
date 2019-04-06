@@ -20,12 +20,15 @@ export class MainComponent implements OnInit, OnDestroy {
     folders: []
   };
 
+  public loading = true;
+
   constructor(private electron: ElectronService) {}
 
   ngOnInit() {
     this.renderer.send(HOME_DIR_FILES_FETCH, {});
     this.renderer.on(HOME_DIR_FILES_FETCH, (_: any, { files }: { files: IFileFetchResult }) => {
       this.data = files;
+      this.loading = false;
     });
   }
 

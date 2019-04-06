@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewEncapsulation, Input } from "@angular/core";
+import { Component, OnInit, OnChanges, Input } from "@angular/core";
 import { IFileFetchResult } from "../../../../utils/works/client";
 
 interface IViewContext {
@@ -12,8 +12,7 @@ interface IViewContext {
 @Component({
   selector: "folder-list",
   templateUrl: "./folder-list.html",
-  styleUrls: ["./style.scss"],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ["./style.scss"]
 })
 export class FolderListComponent implements OnInit, OnChanges {
   @Input() context: IFileFetchResult;

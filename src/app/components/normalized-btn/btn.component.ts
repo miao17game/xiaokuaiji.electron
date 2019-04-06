@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, Input } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 
 @Component({
   selector: "normalized-button",
   templateUrl: "./button.html",
-  styleUrls: ["./style.scss"],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ["./style.scss"]
 })
 export class NormalizedButtonComponent implements OnInit {
   @Input() type: "primary" | "default" = "default";

@@ -1,0 +1,17 @@
+<ng-container>
+  <div class="keep-loading" *ngIf="show">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <ng-container *ngIf="!show">
+    <ng-content></ng-content>
+  </ng-container>
+</ng-container>
