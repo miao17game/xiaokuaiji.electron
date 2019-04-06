@@ -6,10 +6,12 @@ import { NormalizedButtonComponent } from "./normalized-btn/btn.component";
 import { FolderListComponent } from "./folder-list/folder-list.component";
 import { LoadingComponent } from "./loading/loading.component";
 import { ChildUrlPipe } from "./child-url.pipe";
+import { IconDirective } from "./icon.directive";
 
 @NgModule({
   declarations: [
     WebviewDirective,
+    IconDirective,
     UrlConnectPipe,
     ChildUrlPipe,
     NormalizedButtonComponent,
@@ -19,6 +21,7 @@ import { ChildUrlPipe } from "./child-url.pipe";
   imports: [CommonModule],
   exports: [
     WebviewDirective,
+    IconDirective,
     UrlConnectPipe,
     ChildUrlPipe,
     NormalizedButtonComponent,

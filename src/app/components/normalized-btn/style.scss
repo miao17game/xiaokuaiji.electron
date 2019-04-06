@@ -1,19 +1,26 @@
 .normalized-button {
   padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 24px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  transition: 0.35s;
+}
+
+.default {
   border: 1px solid #cdcdcd;
   background-color: #fff;
   color: #000;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.35s;
 
   &:hover {
     background-color: #fcfcfc;
   }
 }
 
-.normalized-primary {
+.primary {
   border: 1px solid #2374ee;
   background-color: #2374ee;
   color: #fff;
@@ -21,4 +28,63 @@
   &:hover {
     background-color: #4387ec;
   }
+}
+
+.danger {
+  border: 1px solid #e72c45;
+  background-color: #e72c45;
+  color: #fff;
+
+  &:hover {
+    background-color: #f0495f;
+  }
+}
+
+.default-outline {
+  border: 1px solid #cdcdcd;
+  background-color: #fff;
+  color: #000;
+
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+.primary-outline {
+  border: 1px solid #2374ee;
+  background-color: #fff;
+  color: #2374ee;
+
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+.danger-outline {
+  border: 1px solid #e72c45;
+  background-color: #fff;
+  color: #e72c45;
+
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+.size-normal {
+  min-width: 80px;
+}
+
+.size-large {
+  min-width: 100%;
+}
+
+.size-small {
+  padding: 4px 6px;
+  min-width: 40px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.btn-circle {
+  border-radius: 24px;
 }

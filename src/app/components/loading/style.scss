@@ -1,9 +1,3 @@
-:host {
-  display: flex;
-  flex: 1;
-  height: 100%;
-}
-
 .keep-loading {
   display: flex;
   background-color: rgba(0, 0, 0, 0.1);
@@ -116,4 +110,11 @@
       transform: rotate(360deg);
     }
   }
+}
+
+.loading-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
 }

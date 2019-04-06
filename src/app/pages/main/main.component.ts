@@ -32,8 +32,9 @@ export class MainComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDragStart(event) {
-    console.log(event);
+  onRefresh() {
+    this.loading = true;
+    this.renderer.send(HOME_DIR_FILES_FETCH, {});
   }
 
   ngOnDestroy(): void {

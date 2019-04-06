@@ -20,6 +20,7 @@
     padding-left: 8px;
     margin-bottom: 4px;
     box-sizing: border-box;
+    transition: 0.5s;
 
     .file-group {
       display: flex;
@@ -46,31 +47,34 @@
           border-bottom-width: 1px;
         }
 
-        .expand-icon {
-          display: inline-block;
-          padding-left: 4px;
-          padding-right: 4px;
+        .exp-icon {
+          margin-left: 4px;
+          margin-right: 4px;
           width: 12px;
           height: 12px;
           color: #303030;
-
-          &::before {
-            content: ">";
-          }
         }
       }
 
       .opened {
-        .expand-icon {
-          &::before {
-            content: "<";
-          }
+        .exp-icon {
+          transform: rotate(180deg);
         }
       }
     }
 
     .no-file {
-      background-color: gray;
+      background-color: #fff;
+      padding-top: 4px;
+      padding-bottom: 4px;
     }
+  }
+
+  .folder-closed {
+    position: fixed;
+    opacity: 0;
+    height: 0;
+    z-index: -1000;
+    transition: 0.15s;
   }
 }

@@ -9,6 +9,7 @@ $font-main-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  max-height: 100vh;
   min-height: 100vh;
 
   a {
@@ -85,6 +86,10 @@ $font-main-color: #fff;
 
     .section {
       flex: 1;
+    }
+
+    .content-root {
+      overflow-y: auto;
     }
 
     .right-section {

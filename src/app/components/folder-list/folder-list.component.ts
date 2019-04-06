@@ -37,6 +37,7 @@ export class FolderListComponent implements OnInit, OnChanges {
     for (const key in changes) {
       if (key === "context") {
         this.viewContext = changes[key].currentValue;
+        this.viewContext.expanded = true;
       }
     }
   }
