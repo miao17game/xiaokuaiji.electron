@@ -11,7 +11,7 @@ import { ClientEvent } from "../../../../../utils/constants/events";
 })
 export class LayoutComponent implements OnInit {
   public showMenu = true;
-  public urls: [string, string][] = [["/home", "首页"], ["/main", "主页面"]];
+  public urls: [string, string][] = [["/home", "首页"], ["/dashboard", "工作台"], ["/preference", "偏好设置"]];
 
   public get currentUrl() {
     return this.route.url;

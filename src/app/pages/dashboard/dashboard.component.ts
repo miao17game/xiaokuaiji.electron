@@ -4,11 +4,11 @@ import { ClientEvent } from "../../../../utils/constants/events";
 import { IFileFetchResult } from "../../../../utils/works/client";
 
 @Component({
-  selector: "app-main",
-  templateUrl: "./main.html",
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.html",
   styleUrls: ["./style.scss"]
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
   private get ipc() {
     return this.electron.ipcRenderer;
   }
