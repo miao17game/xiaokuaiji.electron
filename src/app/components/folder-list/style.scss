@@ -1,0 +1,21 @@
+.folder-list-group {
+  display: flex;
+
+  .folder-container {
+    .single-file {
+      background-color: red;
+    }
+
+    .folder-group {
+      cursor: pointer;
+
+      .single-folder {
+        background-color: green;
+      }
+    }
+
+    .no-file {
+      background-color: gray;
+    }
+  }
+}

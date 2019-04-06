@@ -16,7 +16,7 @@ export class ElectronService {
 
   constructor(private ngZone: NgZone) {
     if (this.isElectron()) {
-      this.heckIpcRendererWithNgZOne();
+      this.heckIpcRendererWithNgZone();
       this.webFrame = window.require("electron").webFrame;
       this.remote = window.require("electron").remote;
       this.childProcess = window.require("child_process");
@@ -28,7 +28,7 @@ export class ElectronService {
     return window && window.process && window.process.type;
   };
 
-  private heckIpcRendererWithNgZOne() {
+  private heckIpcRendererWithNgZone() {
     const { ngZone } = this;
     const ipcRenderer = window.require("electron").ipcRenderer;
     this.ipcRenderer = new Proxy(ipcRenderer, {

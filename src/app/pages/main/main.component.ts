@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ElectronService } from "../../providers/electron.service";
 import { HOME_DIR_FILES_FETCH } from "../../../../utils/constants/events";
-import { IFileFetchResult, IFilesFetchContext } from "../../../../utils/works/client";
+import { IFileFetchResult } from "../../../../utils/works/client";
 
 @Component({
   selector: "app-main",
@@ -13,7 +13,7 @@ export class MainComponent implements OnInit, OnDestroy {
     return this.electron.ipcRenderer;
   }
 
-  private data: IFileFetchResult = {
+  public data: IFileFetchResult = {
     exist: true,
     path: "",
     files: [],
@@ -23,7 +23,7 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(private electron: ElectronService) {}
 
   ngOnInit() {
-    this.renderer.send(HOME_DIR_FILES_FETCH, <IFilesFetchContext>{ childPath: "Documents/需求" });
+    this.renderer.send(HOME_DIR_FILES_FETCH, {});
     this.renderer.on(HOME_DIR_FILES_FETCH, (_: any, { files }: { files: IFileFetchResult }) => {
       this.data = files;
     });
