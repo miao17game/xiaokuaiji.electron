@@ -4,6 +4,7 @@ import { Location as LocationService } from "@angular/common";
 import { ElectronService } from "../../../providers/electron.service";
 import { ClientEvent } from "../../../../../utils/constants/events";
 import { Title } from "@angular/platform-browser";
+import { HistoryService } from "../../../providers/history.service";
 
 @Component({
   selector: "app-layout",
@@ -11,7 +12,10 @@ import { Title } from "@angular/platform-browser";
   styleUrls: ["./style.scss"]
 })
 export class LayoutComponent implements OnInit {
-  public showMenu = true;
+  private goBacking = false;
+
+  public showMenu = false;
+  public showMsg = true;
   public urls: [string, string][] = [["/home", "首页"], ["/dashboard", "工作台"], ["/preference", "偏好设置"]];
 
   public get currentUrl() {
@@ -19,7 +23,7 @@ export class LayoutComponent implements OnInit {
   }
 
   public get canGoBack() {
-    return !!(history && history.length > 1);
+    return this.trip.deepth > 0;
   }
 
   private get renderer() {
@@ -31,7 +35,8 @@ export class LayoutComponent implements OnInit {
     private router: Router,
     private title: Title,
     private route: ActivatedRoute,
-    private electron: ElectronService
+    private electron: ElectronService,
+    private trip: HistoryService
   ) {
     this.initRouteSubps();
   }
@@ -42,20 +47,34 @@ export class LayoutComponent implements OnInit {
     this.showMenu = !this.showMenu;
   }
 
+  onMessageBarClick() {
+    this.showMsg = !this.showMsg;
+  }
+
   onBackClick() {
-    this.location.back();
+    const url = this.trip.pop();
+    this.goBacking = true;
+    this.router.navigateByUrl(url);
   }
 
   onDebugClick() {
     this.renderer.send(ClientEvent.DebugMode, {});
   }
 
+  onSettingsClick() {
+    this.router.navigateByUrl("/preference");
+  }
+
   private initRouteSubps() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        console.log(this.router.routerState);
         const title = this.getTitle(this.router.routerState, this.router.routerState.root).join("-");
         this.title.setTitle(title);
+        if (this.goBacking) {
+          this.goBacking = false;
+        } else {
+          this.trip.push(this.router.url);
+        }
       }
     });
   }

@@ -13,6 +13,6 @@ export class HomeComponent implements OnInit {
 
   onCLick() {
     console.log(this.router);
-    this.router.navigate(["main"]);
+    this.router.navigateByUrl("/dashboard");
   }
 }

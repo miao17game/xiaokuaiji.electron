@@ -23,7 +23,7 @@ const routes: Routes = [
       {
         path: "dashboard",
         component: DashboardComponent,
-        data: { title: "操作台" }
+        data: { title: "工作台" }
       },
       {
         path: "preference",

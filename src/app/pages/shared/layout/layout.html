@@ -1,16 +1,31 @@
 <div class="container">
-  <div class="header">
+  <div class="header" [ngStyle]="{ 'z-index': 1 }">
     <div class="back-group">
-      <div *ngIf="canGoBack" class="back-button" (click)="onBackClick()">后退</div>
+      <div *ngIf="canGoBack" class="back-button" (click)="onBackClick()">
+        <icon type="angle-left"></icon>
+      </div>
     </div>
     <div class="menu-group">
-      <div class="menu-button" (click)="onDebugClick()">调试</div>
-      <div class="menu-button" (click)="onMenuClick()">{{ showMenu ? "收起" : "展开" }}</div>
+      <div class="menu-button" (click)="onDebugClick()">
+        <icon type="plug"></icon>
+      </div>
+      <div class="menu-button" (click)="onSettingsClick()">
+        <icon type="cog" class="normal-icon"></icon>
+      </div>
+      <div class="menu-button" (click)="onMessageBarClick()">
+        <icon type="comments" class="normal-icon"></icon>
+      </div>
+      <div class="menu-button" (click)="onMenuClick()">
+        <icon type="navicon" class="normal-icon"></icon>
+      </div>
     </div>
   </div>
   <div class="main">
     <div class="section content-root">
       <router-outlet></router-outlet>
+    </div>
+    <div class="section right-section msg-box" [ngClass]="{ 'no-display': !showMsg }">
+      <div class="message-item">暂时没有新消息。</div>
     </div>
     <div class="section right-section" [ngClass]="{ 'no-display': !showMenu }">
       <div
