@@ -5,10 +5,25 @@ import { UrlConnectPipe } from "./url.pipe";
 import { NormalizedButtonComponent } from "./normalized-btn/btn.component";
 import { FolderListComponent } from "./folder-list/folder-list.component";
 import { LoadingComponent } from "./loading/loading.component";
+import { ChildUrlPipe } from "./child-url.pipe";
 
 @NgModule({
-  declarations: [WebviewDirective, UrlConnectPipe, NormalizedButtonComponent, FolderListComponent, LoadingComponent],
+  declarations: [
+    WebviewDirective,
+    UrlConnectPipe,
+    ChildUrlPipe,
+    NormalizedButtonComponent,
+    FolderListComponent,
+    LoadingComponent
+  ],
   imports: [CommonModule],
-  exports: [WebviewDirective, UrlConnectPipe, NormalizedButtonComponent, FolderListComponent, LoadingComponent]
+  exports: [
+    WebviewDirective,
+    UrlConnectPipe,
+    ChildUrlPipe,
+    NormalizedButtonComponent,
+    FolderListComponent,
+    LoadingComponent
+  ]
 })
 export class ComponentsModule {}

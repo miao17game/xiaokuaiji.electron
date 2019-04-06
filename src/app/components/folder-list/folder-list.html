@@ -5,17 +5,20 @@
 <ng-template #folderComp let-exist="exist" let-files="files" let-folders="folders" let-path="path">
   <div class="folder-container">
     <ng-container *ngIf="exist">
-      <div *ngFor="let file of files" class="single-file">{{ file }}</div>
-      <ng-container *ngIf="folders && folders.length > 0">
-        <div class="folder-group">
-          <ng-container *ngFor="let folder of folders">
-            <div class="single-folder" (click)="onExpanded(folder)">{{ folder.path }}</div>
-            <ng-container *ngIf="folder.expanded">
-              <ng-container *ngTemplateOutlet="folderComp; context: folder"></ng-container>
-            </ng-container>
+      <div class="file-group" *ngIf="files && files.length > 0">
+        <div *ngFor="let file of files" class="single-file">{{ file | childUrl: path }}</div>
+      </div>
+      <div class="folder-group" *ngIf="folders && folders.length > 0">
+        <ng-container *ngFor="let folder of folders">
+          <div class="single-folder" [ngClass]="{ opened: folder.expanded }" (click)="onExpanded(folder)">
+            <span class="expand-icon"></span>
+            <span>{{ folder.path | childUrl: path }}</span>
+          </div>
+          <ng-container *ngIf="folder.expanded">
+            <ng-container *ngTemplateOutlet="folderComp; context: folder"></ng-container>
           </ng-container>
-        </div>
-      </ng-container>
+        </ng-container>
+      </div>
     </ng-container>
     <div *ngIf="!exist" class="no-file">Nothing here.</div>
   </div>
