@@ -6,6 +6,12 @@ import { ClientEvent } from "../../../../../utils/constants/events";
 import { Title } from "@angular/platform-browser";
 import { HistoryService } from "../../../providers/history.service";
 
+const routes = {
+  home: "首页",
+  dashboard: "工作台",
+  preference: "偏好设置"
+};
+
 @Component({
   selector: "app-layout",
   templateUrl: "./layout.html",
@@ -16,7 +22,7 @@ export class LayoutComponent implements OnInit {
 
   public showMenu = false;
   public showMsg = true;
-  public urls: [string, string][] = [["/home", "首页"], ["/dashboard", "工作台"], ["/preference", "偏好设置"]];
+  public urls: [string, string][] = buildRoutes(routes);
 
   public get currentUrl() {
     return this.route.url;
@@ -89,4 +95,8 @@ export class LayoutComponent implements OnInit {
     }
     return data;
   }
+}
+
+function buildRoutes(routes: { [key: string]: string }): [string, string][] {
+  return Object.keys(routes).map(k => [`/${k}`, routes[k]]);
 }
