@@ -12,6 +12,8 @@ const routes = {
   preference: "偏好设置"
 };
 
+const actions = {};
+
 @Component({
   selector: "app-layout",
   templateUrl: "./layout.html",
@@ -98,5 +100,5 @@ export class LayoutComponent implements OnInit {
 }
 
 function buildRoutes(routes: { [key: string]: string }): [string, string][] {
-  return Object.keys(routes).map(k => [`/${k}`, routes[k]]);
+  return Object.keys(routes).map<[string, string]>(k => [`/${k}`, routes[k]]);
 }

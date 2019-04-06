@@ -146,6 +146,10 @@ $leave-duration: 0.25s;
       opacity: 0;
       color: transparent;
       transition: $leave-duration;
+
+      div {
+        display: none;
+      }
     }
   }
 }

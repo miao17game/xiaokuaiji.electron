@@ -98,10 +98,15 @@
   }
 
   .folder-closed {
-    position: fixed;
     opacity: 0;
     height: 0;
-    z-index: -1000;
     transition: 0.15s;
+    margin-bottom: -1px;
+
+    // position: fixed;
+    // z-index: -1000;
+    div {
+      display: none;
+    }
   }
 }
