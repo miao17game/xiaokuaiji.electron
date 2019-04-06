@@ -25,6 +25,10 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
     fs.mkdir(folder, error => event.sender.send(ClientEvent.InitAppFolder, error || true));
   });
   main.on(ClientEvent.FetchPreferences, (event: Event, {}) => {
+    if (!preferenceConf) {
+      const result = loadPreference(PREFERENCE_CONF);
+      preferenceConf = result.configs;
+    }
     event.sender.send(ClientEvent.FetchPreferences, { configs: preferenceConf });
   });
   main.on(ClientEvent.UpdatePreferences, (event: Event, { configs }) => {
