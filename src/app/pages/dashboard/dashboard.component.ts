@@ -1,18 +1,13 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ElectronService } from "../../providers/electron.service";
-import { ClientEvent } from "../../../../utils/constants/events";
+import { Component, OnInit } from "@angular/core";
 import { IFolderStruct } from "../../../../utils/metadata";
+import { CoreService } from "../../providers/core.service";
 
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.html",
   styleUrls: ["./style.scss"]
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  private get ipc() {
-    return this.electron.ipcRenderer;
-  }
-
+export class DashboardComponent implements OnInit {
   public data: IFolderStruct = {
     exist: true,
     path: "",
@@ -22,34 +17,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public loading = true;
 
-  constructor(private electron: ElectronService) {}
+  constructor(private core: CoreService) {}
 
   ngOnInit() {
-    this.ipc.send(ClientEvent.FetchFiles, { showHideFiles: false });
-    this.ipc.on(ClientEvent.FetchFiles, (_: any, { files }: { files: IFolderStruct }) => {
-      this.data = files;
-      this.loading = false;
-    });
+    this.onRefresh();
   }
 
-  onRefresh() {
+  async onRefresh() {
     this.loading = true;
-    this.ipc.send(ClientEvent.FetchFiles, {});
+    const files = await this.core.dashboardFetch();
+    this.data = files;
+    this.loading = false;
   }
 
-  initRootFolder() {
-    this.ipc.send(ClientEvent.InitAppFolder, {});
-    this.ipc.on(ClientEvent.InitAppFolder, () => {
-      this.onRefresh();
-    });
+  async initRootFolder() {
+    await this.core.dashboardInit();
+    this.onRefresh();
   }
 
   onFileSelect(path: string) {
     console.log(path);
-  }
-
-  ngOnDestroy(): void {
-    this.ipc.removeAllListeners(ClientEvent.FetchFiles);
-    this.ipc.removeAllListeners(ClientEvent.InitAppFolder);
   }
 }

@@ -3,6 +3,7 @@ import { Router, NavigationEnd, RouterState, ActivatedRoute } from "@angular/rou
 import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
 import { ClientEvent } from "../../../utils/constants/events";
+import { IFolderStruct } from "../../../utils/metadata";
 
 @Injectable()
 export class CoreService {
@@ -24,6 +25,22 @@ export class CoreService {
 
   public debugToolSwitch() {
     this.ipc.send(ClientEvent.DebugMode, {});
+  }
+
+  public dashboardInit() {
+    return new Promise<IFolderStruct>((resolve, reject) => {
+      this.ipc.on(ClientEvent.InitAppFolder, resolve);
+      this.ipc.send(ClientEvent.InitAppFolder, {});
+    });
+  }
+
+  public dashboardFetch() {
+    return new Promise<IFolderStruct>((resolve, reject) => {
+      this.ipc.once(ClientEvent.FetchFiles, (_: any, { files }: { files: IFolderStruct }) => {
+        resolve(files);
+      });
+      this.ipc.send(ClientEvent.FetchFiles, { showHideFiles: false });
+    });
   }
 
   private getTitle(state: RouterState, parent: ActivatedRoute) {
