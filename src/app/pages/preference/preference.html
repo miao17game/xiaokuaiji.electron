@@ -1,3 +1,5 @@
 <loading [show]="loading">
-  <div>preference</div>
+  <div class="preferences-container">
+    <div>最后更新日期：{{ configs.updateAt | date: "yyyy-MM-dd hh:mm:ss" }}</div>
+  </div>
 </loading>

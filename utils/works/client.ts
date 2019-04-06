@@ -1,12 +1,13 @@
 import { ipcMain, BrowserWindow, Event } from "electron";
 import { ClientEvent } from "../constants/events";
 import { ROOT_FOLDER, PREFERENCE_CONF } from "../constants/paths";
-import { IFilesFetchContext, IFolderStruct as IFileFetchResult } from "../metadata";
+import { IFilesFetchContext, IFolderStruct as IFileFetchResult, IPreferenceConfig } from "../metadata";
 import * as path from "path";
 import * as fs from "fs";
 
 export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
-  main.on(ClientEvent.DebugMode, (event: Event, data) => {
+  let { configs: preferenceConf } = loadPreference(PREFERENCE_CONF);
+  main.on(ClientEvent.DebugMode, (event: Event) => {
     const devToolOpened = win.webContents.isDevToolsOpened();
     if (devToolOpened) {
       win.webContents.closeDevTools();
@@ -23,21 +24,37 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
     if (fs.existsSync(folder)) return;
     fs.mkdir(folder, error => event.sender.send(ClientEvent.InitAppFolder, error || true));
   });
-  main.on(ClientEvent.FetchPreferences, (event: Event, { path = PREFERENCE_CONF }) => {
-    let config: any = { updateAt: new Date().getTime() };
-    let error: Error;
-    if (!fs.existsSync(path)) {
-      fs.appendFileSync(path, JSON.stringify({ updateAt: new Date().getTime() }), { flag: "w" });
-    } else {
-      try {
-        const confStr = fs.readFileSync(path).toString();
-        config = JSON.parse(confStr);
-      } catch (_e) {
-        error = _e;
-      }
-    }
-    event.sender.send(ClientEvent.FetchPreferences, { configs: config, error });
+  main.on(ClientEvent.FetchPreferences, (event: Event, {}) => {
+    event.sender.send(ClientEvent.FetchPreferences, { configs: preferenceConf });
   });
+  main.on(ClientEvent.UpdatePreferences, (event: Event, { configs }) => {
+    preferenceConf = {
+      ...preferenceConf,
+      ...configs,
+      updateAt: new Date().getTime()
+    };
+    try {
+      fs.appendFileSync(PREFERENCE_CONF, JSON.stringify(preferenceConf), { flag: "w+" });
+      event.sender.send(ClientEvent.UpdatePreferences, true);
+    } catch (error) {
+      event.sender.send(ClientEvent.UpdatePreferences, error);
+    }
+  });
+}
+
+function loadPreference(path: any): { configs?: IPreferenceConfig; errors?: Error } {
+  try {
+    if (!fs.existsSync(path)) {
+      const defaultConfigs = { updateAt: new Date().getTime() };
+      fs.appendFileSync(path, JSON.stringify(defaultConfigs), { flag: "w+" });
+      return { configs: defaultConfigs };
+    } else {
+      const confStr = fs.readFileSync(path).toString();
+      return { configs: JSON.parse(confStr) };
+    }
+  } catch (_e) {
+    return { errors: _e };
+  }
 }
 
 function readFiles(thisPath: string, showHideFiles = false) {

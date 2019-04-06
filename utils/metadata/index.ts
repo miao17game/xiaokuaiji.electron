@@ -8,3 +8,8 @@ export interface IFolderStruct {
   files: string[];
   folders: IFolderStruct[];
 }
+
+export interface IPreferenceConfig {
+  updateAt?: number;
+  rootFolder?: string;
+}

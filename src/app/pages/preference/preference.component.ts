@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ElectronService } from "../../providers/electron.service";
 import { ClientEvent } from "../../../../utils/constants/events";
+import { IPreferenceConfig } from "../../../../utils/metadata";
 
 @Component({
   selector: "app-preference",
@@ -9,7 +10,7 @@ import { ClientEvent } from "../../../../utils/constants/events";
 })
 export class PreferenceComponent implements OnInit, OnDestroy {
   public loading = true;
-  public configs: any = {};
+  public configs: IPreferenceConfig = {};
 
   private get ipc() {
     return this.electron.ipcRenderer;
@@ -19,13 +20,9 @@ export class PreferenceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ipc.send(ClientEvent.FetchPreferences, {});
-    this.ipc.on(ClientEvent.FetchPreferences, ({ error, configs }) => {
-      if (error) {
-        console.log(error);
-      } else {
-        this.configs = configs;
-        this.loading = false;
-      }
+    this.ipc.on(ClientEvent.FetchPreferences, (_: any, { configs }) => {
+      this.configs = configs;
+      this.loading = false;
     });
   }
 
