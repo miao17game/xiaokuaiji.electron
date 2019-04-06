@@ -5,6 +5,10 @@ html, body {
   height: 100%;
 }
 
+div {
+  box-sizing: border-box;
+}
+
 // $dark-mode: #404040;
 // $light-mode: #ececec;
 

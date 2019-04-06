@@ -51,9 +51,11 @@ $font-main-color: #fff;
     color: $font-main-color;
     padding: 20px;
     box-shadow: 0px 1px 1px #acacac;
+    box-sizing: border-box;
 
     .back-group {
       flex: 1;
+      box-sizing: border-box;
 
       .back-button {
         cursor: pointer;
@@ -65,6 +67,7 @@ $font-main-color: #fff;
     .menu-group {
       flex: 1;
       text-align: right;
+      box-sizing: border-box;
 
       .menu-button {
         cursor: pointer;
@@ -78,6 +81,7 @@ $font-main-color: #fff;
     display: flex;
     flex-direction: row;
     flex: 1;
+    box-sizing: border-box;
 
     .section {
       flex: 1;
