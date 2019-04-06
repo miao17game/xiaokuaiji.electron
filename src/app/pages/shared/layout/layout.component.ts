@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location as LocationService } from "@angular/common";
 import { ElectronService } from "../../../providers/electron.service";
-import { DEBUG_MODE_CHANGE } from "../../../../../utils/constants/events";
+import { ClientEvent } from "../../../../../utils/constants/events";
 
 @Component({
   selector: "app-layout",
@@ -45,6 +45,6 @@ export class LayoutComponent implements OnInit {
   }
 
   onDebugClick() {
-    this.renderer.send(DEBUG_MODE_CHANGE, {});
+    this.renderer.send(ClientEvent.DebugMode, {});
   }
 }

@@ -12,7 +12,7 @@ export class AppComponent {
     translate.setDefaultLang("en");
     console.log("AppConfig", AppConfig);
 
-    if (electronService.isElectron()) {
+    if (electronService.appMode) {
       console.log("Mode electron");
     } else {
       console.log("Mode web");

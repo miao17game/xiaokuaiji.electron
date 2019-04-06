@@ -1,3 +1,3 @@
 import * as os from "os";
 
-export const ROOT_FOLDER = `${os.homedir()}/Documents/需求`;
+export const ROOT_FOLDER = `${os.homedir()}/Documents/xiaokuaiji`;

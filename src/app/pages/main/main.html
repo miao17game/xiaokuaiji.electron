@@ -3,6 +3,12 @@
     <div class="actions-group">
       <normalized-button type="primary" size="small" [outline]="false" (click)="onRefresh()">刷新</normalized-button>
     </div>
-    <folder-list [context]="data" (onFileClick)="onFileSelect($event)"></folder-list>
+    <folder-list [context]="data" (onFileClick)="onFileSelect($event)">
+      <div id="rootNotExist" class="root-not-exist">
+        <span>应用程序默认文件夹不存在。</span>
+        <normalized-button type="primary" size="small" (click)="initRootFolder()">创建</normalized-button>
+      </div>
+      <span id="folderEmpty">当前文件夹是空的。</span>
+    </folder-list>
   </loading>
 </div>

@@ -7,11 +7,13 @@ import { FolderListComponent } from "./folder-list/folder-list.component";
 import { LoadingComponent } from "./loading/loading.component";
 import { ChildUrlPipe } from "./child-url.pipe";
 import { IconDirective } from "./icon.directive";
+import { DefaultValueDirective } from "./default-content.directive";
 
 @NgModule({
   declarations: [
     WebviewDirective,
     IconDirective,
+    DefaultValueDirective,
     UrlConnectPipe,
     ChildUrlPipe,
     NormalizedButtonComponent,
@@ -22,6 +24,7 @@ import { IconDirective } from "./icon.directive";
   exports: [
     WebviewDirective,
     IconDirective,
+    DefaultValueDirective,
     UrlConnectPipe,
     ChildUrlPipe,
     NormalizedButtonComponent,

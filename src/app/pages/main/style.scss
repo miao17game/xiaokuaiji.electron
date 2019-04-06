@@ -7,4 +7,14 @@
     padding: 12px;
     padding-bottom: 4px;
   }
+
+  .root-not-exist {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 12px;
+
+    span {
+      line-height: 24px;
+    }
+  }
 }

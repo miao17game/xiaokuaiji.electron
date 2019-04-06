@@ -1,5 +1,5 @@
 import { ipcMain, BrowserWindow, Event } from "electron";
-import { DEBUG_MODE_CHANGE, HOME_DIR_FILES_FETCH } from "../constants/events";
+import { ClientEvent } from "../constants/events";
 import { ROOT_FOLDER } from "../constants/paths";
 import * as path from "path";
 import * as fs from "fs";
@@ -9,7 +9,7 @@ export interface IFilesFetchContext {
 }
 
 export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
-  main.on(DEBUG_MODE_CHANGE, (event: Event, data) => {
+  main.on(ClientEvent.DebugMode, (event: Event, data) => {
     const devToolOpened = win.webContents.isDevToolsOpened();
     if (devToolOpened) {
       win.webContents.closeDevTools();
@@ -17,10 +17,14 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
       win.webContents.openDevTools();
     }
   });
-  main.on(HOME_DIR_FILES_FETCH, (event: Event, { showHideFiles = false }: IFilesFetchContext = {}) => {
-    event.sender.send(HOME_DIR_FILES_FETCH, {
+  main.on(ClientEvent.FetchFiles, (event: Event, { showHideFiles = false }: IFilesFetchContext = {}) => {
+    event.sender.send(ClientEvent.FetchFiles, {
       files: readFiles(ROOT_FOLDER, showHideFiles)
     });
+  });
+  main.on(ClientEvent.InitAppFolder, (event: Event, { folder = ROOT_FOLDER } = {}) => {
+    if (fs.existsSync(folder)) return;
+    fs.mkdir(folder, error => event.sender.send(ClientEvent.InitAppFolder, error || true));
   });
 }
 

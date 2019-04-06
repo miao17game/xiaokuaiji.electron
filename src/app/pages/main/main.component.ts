@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ElectronService } from "../../providers/electron.service";
-import { HOME_DIR_FILES_FETCH } from "../../../../utils/constants/events";
+import { ClientEvent } from "../../../../utils/constants/events";
 import { IFileFetchResult } from "../../../../utils/works/client";
 
 @Component({
@@ -9,7 +9,7 @@ import { IFileFetchResult } from "../../../../utils/works/client";
   styleUrls: ["./style.scss"]
 })
 export class MainComponent implements OnInit, OnDestroy {
-  private get renderer() {
+  private get ipc() {
     return this.electron.ipcRenderer;
   }
 
@@ -25,8 +25,8 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(private electron: ElectronService) {}
 
   ngOnInit() {
-    this.renderer.send(HOME_DIR_FILES_FETCH, {});
-    this.renderer.on(HOME_DIR_FILES_FETCH, (_: any, { files }: { files: IFileFetchResult }) => {
+    this.ipc.send(ClientEvent.FetchFiles, {});
+    this.ipc.on(ClientEvent.FetchFiles, (_: any, { files }: { files: IFileFetchResult }) => {
       this.data = files;
       this.loading = false;
     });
@@ -34,7 +34,14 @@ export class MainComponent implements OnInit, OnDestroy {
 
   onRefresh() {
     this.loading = true;
-    this.renderer.send(HOME_DIR_FILES_FETCH, {});
+    this.ipc.send(ClientEvent.FetchFiles, {});
+  }
+
+  initRootFolder() {
+    this.ipc.send(ClientEvent.InitAppFolder, {});
+    this.ipc.on(ClientEvent.InitAppFolder, () => {
+      this.onRefresh();
+    });
   }
 
   onFileSelect(path: string) {
@@ -42,6 +49,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeAllListeners(HOME_DIR_FILES_FETCH);
+    this.ipc.removeAllListeners(ClientEvent.FetchFiles);
+    this.ipc.removeAllListeners(ClientEvent.InitAppFolder);
   }
 }

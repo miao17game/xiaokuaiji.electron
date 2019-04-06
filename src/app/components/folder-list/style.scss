@@ -26,12 +26,22 @@
     .file-group {
       display: flex;
       flex-direction: column;
+      border: 0px solid #ececec;
+      border-bottom-width: 1px;
 
       .single-file {
         line-height: 28px;
         background-color: transparent;
         font-size: 14px;
       }
+    }
+
+    .files-root {
+      padding-left: 12px;
+    }
+
+    .files-no-folders {
+      border-bottom-width: 0;
     }
 
     .folder-group {
@@ -75,6 +85,20 @@
       padding-bottom: 4px;
       color: #909090;
       font-size: 14px;
+    }
+
+    .no-exist {
+      background-color: #fff;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      color: #909090;
+      font-size: 14px;
+    }
+
+    .empty-if-root {
+      padding-left: 8px;
+      border: 0 solid #ececec;
+      border-bottom-width: 1px;
     }
   }
 

@@ -14,6 +14,10 @@ export class ElectronService {
   childProcess: typeof childProcess;
   fs: typeof fs;
 
+  public get appMode() {
+    return this.isElectron();
+  }
+
   constructor(private ngZone: NgZone) {
     if (this.isElectron()) {
       this.heckIpcRendererWithNgZone();
@@ -24,9 +28,9 @@ export class ElectronService {
     }
   }
 
-  isElectron = () => {
-    return window && window.process && window.process.type;
-  };
+  private isElectron(): boolean {
+    return !!(window && window.process && window.process.type);
+  }
 
   private heckIpcRendererWithNgZone() {
     const { ngZone } = this;
