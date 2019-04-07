@@ -40,7 +40,7 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
     const preferenceConf = {
       ...sourceConfs,
       ...configs,
-      updateAt: new Date().getTime()
+      updateAt: createStamp()
     };
     try {
       fs.appendFileSync(PREFERENCE_CONF, JSON.stringify(preferenceConf), { flag: "w+" });
@@ -56,7 +56,7 @@ function tryLoadPreference(path = PREFERENCE_CONF) {
   let preferenceConf: IPreferenceConfig;
   try {
     if (!fs.existsSync(path)) {
-      const defaultConfigs = { updateAt: new Date().getTime() };
+      const defaultConfigs = { updateAt: createStamp() };
       fs.appendFileSync(path, JSON.stringify(defaultConfigs), { flag: "w+" });
       preferenceConf = defaultConfigs;
     } else {
@@ -102,6 +102,10 @@ function readFiles(thisPath: string, showHideFiles = false) {
     }
   }
   return result;
+}
+
+function createStamp() {
+  return new Date().getTime();
 }
 
 function createUnknownError(error: any) {
