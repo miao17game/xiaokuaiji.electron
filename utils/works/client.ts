@@ -1,12 +1,17 @@
 import { ipcMain, BrowserWindow, Event } from "electron";
 import { ClientEvent } from "../constants/events";
 import { ROOT_FOLDER, PREFERENCE_CONF } from "../constants/paths";
-import { IFilesFetchContext, IFolderStruct as IFileFetchResult, IPreferenceConfig } from "../metadata";
+import {
+  IFilesFetchContext,
+  IFolderStruct as IFileFetchResult,
+  IPreferenceConfig,
+  AppError,
+  ErrorCode
+} from "../metadata";
 import * as path from "path";
 import * as fs from "fs";
 
 export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
-  let { configs: preferenceConf } = loadPreference(PREFERENCE_CONF);
   main.on(ClientEvent.DebugMode, (event: Event) => {
     const devToolOpened = win.webContents.isDevToolsOpened();
     if (devToolOpened) {
@@ -22,18 +27,18 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
   });
   main.on(ClientEvent.InitAppFolder, (event: Event, { folder = ROOT_FOLDER } = {}) => {
     if (fs.existsSync(folder)) return;
-    fs.mkdir(folder, error => event.sender.send(ClientEvent.InitAppFolder, error || true));
+    fs.mkdir(folder, error => event.sender.send(ClientEvent.InitAppFolder, !error ? true : createUnknownError(error)));
   });
   main.on(ClientEvent.FetchPreferences, (event: Event, {}) => {
-    if (!preferenceConf) {
-      const result = loadPreference(PREFERENCE_CONF);
-      preferenceConf = result.configs;
-    }
-    event.sender.send(ClientEvent.FetchPreferences, { configs: preferenceConf });
+    event.sender.send(ClientEvent.FetchPreferences, tryLoadPreference());
   });
   main.on(ClientEvent.UpdatePreferences, (event: Event, { configs }) => {
-    preferenceConf = {
-      ...preferenceConf,
+    const { configs: sourceConfs, error: errors } = tryLoadPreference();
+    if (errors) {
+      return event.sender.send(ClientEvent.UpdatePreferences, errors);
+    }
+    const preferenceConf = {
+      ...sourceConfs,
       ...configs,
       updateAt: new Date().getTime()
     };
@@ -41,24 +46,36 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
       fs.appendFileSync(PREFERENCE_CONF, JSON.stringify(preferenceConf), { flag: "w+" });
       event.sender.send(ClientEvent.UpdatePreferences, true);
     } catch (error) {
-      event.sender.send(ClientEvent.UpdatePreferences, error);
+      event.sender.send(ClientEvent.UpdatePreferences, createUnknownError(error));
     }
   });
 }
 
-function loadPreference(path: any): { configs?: IPreferenceConfig; errors?: Error } {
+function tryLoadPreference(path = PREFERENCE_CONF) {
+  let error: AppError;
+  let preferenceConf: IPreferenceConfig;
   try {
     if (!fs.existsSync(path)) {
       const defaultConfigs = { updateAt: new Date().getTime() };
       fs.appendFileSync(path, JSON.stringify(defaultConfigs), { flag: "w+" });
-      return { configs: defaultConfigs };
+      preferenceConf = defaultConfigs;
     } else {
       const confStr = fs.readFileSync(path).toString();
-      return { configs: JSON.parse(confStr) };
+      preferenceConf = JSON.parse(confStr);
     }
   } catch (_e) {
-    return { errors: _e };
+    if (_e.code === "ENOENT" && _e.errno === -2 && _e.syscall === "open") {
+      error = new AppError(ErrorCode.PreferenceNotFound, "preference file not found.", {
+        syscall: _e.syscall,
+        path: _e.path,
+        msg: _e.message,
+        stack: _e.stack
+      });
+    } else {
+      error = createUnknownError(error);
+    }
   }
+  return { configs: preferenceConf, error };
 }
 
 function readFiles(thisPath: string, showHideFiles = false) {
@@ -85,4 +102,12 @@ function readFiles(thisPath: string, showHideFiles = false) {
     }
   }
   return result;
+}
+
+function createUnknownError(error: any) {
+  return new AppError(ErrorCode.Unknown, "unknown error.", {
+    ...error,
+    msg: error.message,
+    stack: error.stack
+  });
 }

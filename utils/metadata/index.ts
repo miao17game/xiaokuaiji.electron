@@ -13,3 +13,12 @@ export interface IPreferenceConfig {
   updateAt?: number;
   rootFolder?: string;
 }
+
+export enum ErrorCode {
+  Unknown = 0,
+  PreferenceNotFound = 1
+}
+
+export class AppError {
+  constructor(public readonly code: ErrorCode, public readonly message: string, public readonly extras: any = {}) {}
+}

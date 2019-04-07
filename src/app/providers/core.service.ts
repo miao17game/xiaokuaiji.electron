@@ -3,7 +3,7 @@ import { Router, NavigationEnd, RouterState, ActivatedRoute } from "@angular/rou
 import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
 import { ClientEvent } from "../../../utils/constants/events";
-import { IFolderStruct } from "../../../utils/metadata";
+import { IFolderStruct, IPreferenceConfig } from "../../../utils/metadata";
 
 @Injectable()
 export class CoreService {
@@ -27,19 +27,36 @@ export class CoreService {
     this.ipc.send(ClientEvent.DebugMode, {});
   }
 
-  public dashboardInit() {
-    return new Promise<IFolderStruct>((resolve, reject) => {
-      this.ipc.once(ClientEvent.InitAppFolder, resolve);
+  public dashboardInit(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.ipc.once(ClientEvent.InitAppFolder, result => {
+        if (result === true) {
+          resolve();
+        } else {
+          reject(result);
+        }
+      });
       this.ipc.send(ClientEvent.InitAppFolder, {});
     });
   }
 
-  public dashboardFetch() {
+  public dashboardFetch(): Promise<IFolderStruct> {
     return new Promise<IFolderStruct>((resolve, reject) => {
-      this.ipc.once(ClientEvent.FetchFiles, (_: any, { files }: { files: IFolderStruct }) => {
-        resolve(files);
-      });
+      this.ipc.once(ClientEvent.FetchFiles, (_: any, result: { files: IFolderStruct }) => resolve(result.files));
       this.ipc.send(ClientEvent.FetchFiles, { showHideFiles: false });
+    });
+  }
+
+  public preferenceFetch(): Promise<IPreferenceConfig> {
+    return new Promise((resolve, reject) => {
+      this.ipc.once(ClientEvent.FetchPreferences, (_: any, { configs, error }) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(configs);
+        }
+      });
+      this.ipc.send(ClientEvent.FetchPreferences, {});
     });
   }
 
