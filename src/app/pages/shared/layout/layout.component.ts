@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ClientEvent } from "../../../../../utils/constants/events";
+import { Router } from "@angular/router";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
 
@@ -23,7 +22,11 @@ export class LayoutComponent implements OnInit {
   public urls: [string, string][] = buildRoutes(routes);
 
   public get canGoBack() {
-    return this.history.deepth > 0;
+    return this.history.canBack;
+  }
+
+  public get canGoForward() {
+    return this.history.canForward;
   }
 
   constructor(private router: Router, private history: HistoryService, private core: CoreService) {
@@ -41,7 +44,12 @@ export class LayoutComponent implements OnInit {
   }
 
   onBackClick() {
-    const url = this.history.pop();
+    const url = this.history.getBack();
+    this.router.navigateByUrl(url);
+  }
+
+  onForwardClick() {
+    const url = this.history.getForward();
     this.router.navigateByUrl(url);
   }
 

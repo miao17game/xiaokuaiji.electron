@@ -29,7 +29,7 @@ export class CoreService {
 
   public dashboardInit(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.ipc.once(ClientEvent.InitAppFolder, result => {
+      this.ipc.once(ClientEvent.InitAppFolder, (_: any, result) => {
         if (result === true) {
           resolve();
         } else {

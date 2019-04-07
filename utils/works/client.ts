@@ -27,7 +27,9 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
   });
   main.on(ClientEvent.InitAppFolder, (event: Event, { folder = ROOT_FOLDER } = {}) => {
     if (fs.existsSync(folder)) return;
-    fs.mkdir(folder, error => event.sender.send(ClientEvent.InitAppFolder, !error ? true : createUnknownError(error)));
+    fs.mkdir(folder, error => {
+      event.sender.send(ClientEvent.InitAppFolder, !error ? true : createUnknownError(error));
+    });
   });
   main.on(ClientEvent.FetchPreferences, (event: Event, {}) => {
     event.sender.send(ClientEvent.FetchPreferences, tryLoadPreference());

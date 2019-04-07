@@ -4,7 +4,7 @@ $hover-color: #f0ba55;
 $active-color: #1859bb;
 $msg-box-color: #f8f8f8;
 $font-main-color: #fff;
-
+$disable-color: #cdcdcd;
 $enter-duration: 0.45s;
 $leave-duration: 0.25s;
 
@@ -69,7 +69,7 @@ $leave-duration: 0.25s;
     justify-content: space-around;
     background-color: $primary-color;
     color: $font-main-color;
-    padding: 20px;
+    padding: 0;
     box-shadow: 0px 0px 8px #00000090;
     box-sizing: border-box;
 
@@ -80,16 +80,27 @@ $leave-duration: 0.25s;
       .back-button {
         cursor: pointer;
         display: inline-block;
-        margin-right: 12px;
+        padding: 15px 20px;
         transition: $enter-duration;
 
         &:hover {
           color: $hover-color;
+          background-color: $primary-weak-color;
         }
 
         icon {
           font-size: 24px;
           margin-top: -5px;
+        }
+      }
+
+      .back-disable {
+        color: $disable-color;
+        cursor: unset;
+
+        &:hover {
+          color: $disable-color;
+          background-color: $primary-color;
         }
       }
     }
@@ -102,11 +113,12 @@ $leave-duration: 0.25s;
       .menu-button {
         cursor: pointer;
         display: inline-block;
-        margin-left: 12px;
+        padding: 15px 20px 15px 20px;
         transition: $enter-duration;
 
         &:hover {
           color: $hover-color;
+          background-color: $primary-weak-color;
         }
       }
     }
