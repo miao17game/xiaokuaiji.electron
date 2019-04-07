@@ -19,6 +19,6 @@ export enum ErrorCode {
   PreferenceNotFound = 1
 }
 
-export class AppError {
-  constructor(public readonly code: ErrorCode, public readonly message: string, public readonly extras: any = {}) {}
+export class AppError<T extends { [prop: string]: any } = any> {
+  constructor(public readonly code: ErrorCode, public readonly message: string, public readonly extras: T = <any>{}) {}
 }
