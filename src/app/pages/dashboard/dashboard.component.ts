@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { IFolderStruct } from "../../../../utils/metadata";
-import { CoreService } from "../../providers/core.service";
+import { ContextService } from "../../providers/context.service";
 
 @Component({
   selector: "app-dashboard",
@@ -8,31 +7,31 @@ import { CoreService } from "../../providers/core.service";
   styleUrls: ["./style.scss"]
 })
 export class DashboardComponent implements OnInit {
-  public data: IFolderStruct = {
-    exist: true,
-    path: "",
-    files: [],
-    folders: []
-  };
-
-  public loading = true;
-
-  constructor(private core: CoreService) {}
-
-  ngOnInit() {
-    this.onRefresh();
+  private get context() {
+    return this.ctx.dashboard;
   }
+
+  private get actions() {
+    return this.context.actions;
+  }
+
+  public get dataAsync() {
+    return this.context.observer;
+  }
+
+  public loading = false;
+
+  constructor(private ctx: ContextService) {}
+
+  ngOnInit() {}
 
   async onRefresh() {
     this.loading = true;
-    const files = await this.core.dashboardFetch();
-    this.data = files;
-    this.loading = false;
+    this.actions.referesh(() => (this.loading = false));
   }
 
   async initRootFolder() {
-    await this.core.dashboardInit();
-    this.onRefresh();
+    this.actions.init(() => this.onRefresh());
   }
 
   onFileSelect(path: string) {

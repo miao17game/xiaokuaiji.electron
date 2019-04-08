@@ -1,5 +1,5 @@
-<div class="main" *ngIf="data">
-  <loading [show]="loading">
+<div class="main" *ngIf="(dataAsync | async) as data">
+  <loading [show]="!data || loading">
     <div class="actions-group">
       <normalized-button type="primary" size="small" [outline]="false" (click)="onRefresh()">刷新</normalized-button>
     </div>

@@ -1,6 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { IPreferenceConfig } from "../../../../utils/metadata";
-import { CoreService } from "../../providers/core.service";
 import { ConfigsService } from "../../providers/configs.service";
 
 @Component({
