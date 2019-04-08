@@ -6,8 +6,8 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { AppRoutingModule } from "./router.module";
-import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./routers/router.module";
+import { AppComponent } from "./bootstrap/app.component";
 import { ProvidersModule } from "./providers/providers.module";
 import { PagesModule } from "./pages/pages.module";
 

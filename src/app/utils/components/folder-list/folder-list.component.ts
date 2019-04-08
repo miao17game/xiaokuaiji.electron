@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from "@angular/core";
-import { IFolderStruct } from "../../../../utils/metadata";
+import { IFolderStruct } from "../../../../../utils/metadata";
 import { Source } from "webpack-sources";
 
 interface IViewContext {

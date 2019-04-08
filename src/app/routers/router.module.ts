@@ -1,9 +1,9 @@
-import { HomeComponent } from "./pages/home/home.component";
+import { HomeComponent } from "../pages/home/home.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { DashboardComponent } from "./pages/dashboard/dashboard.component";
-import { LayoutComponent } from "./pages/shared/layout/layout.component";
-import { PreferenceComponent } from "./pages/preference/preference.component";
+import { DashboardComponent } from "../pages/dashboard/dashboard.component";
+import { LayoutComponent } from "../pages/shared/layout/layout.component";
+import { PreferenceComponent } from "../pages/preference/preference.component";
 
 const routes: Routes = [
   {
