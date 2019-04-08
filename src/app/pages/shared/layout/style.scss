@@ -54,11 +54,19 @@ $leave-duration: 0.25s;
     margin-left: 4px;
   }
 
-  .normal-icon {
+  .icon-size-19 {
+    font-size: 19px;
+  }
+
+  .icon-size-18 {
     font-size: 18px;
   }
 
-  .weak-normal-icon {
+  .icon-size-17 {
+    font-size: 17px;
+  }
+
+  .icon-size-16 {
     font-size: 16px;
   }
 
@@ -114,6 +122,7 @@ $leave-duration: 0.25s;
 
     .address-group {
       flex: 1;
+      padding: 0 12px;
 
       .address-panel {
         vertical-align: middle;

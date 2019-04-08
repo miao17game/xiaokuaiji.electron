@@ -63,26 +63,27 @@ function buildActions(target: LayoutComponent) {
   const actions = {
     debug: {
       type: "plug",
+      class: "icon-size-16",
       onclick: target.onDebugClick.bind(target)
     },
     usercenter: {
       type: "user-circle",
-      class: "weak-normal-icon",
+      class: "icon-size-17",
       onclick: () => {}
     },
     settings: {
       type: "cog",
-      class: "normal-icon",
+      class: "icon-size-19",
       onclick: target.onSettingsClick.bind(target)
     },
     message: {
       type: "comments",
-      class: "normal-icon",
+      class: "icon-size-19",
       onclick: target.onMessageBarClick.bind(target)
     },
     menu: {
       type: "navicon",
-      class: "normal-icon",
+      class: "icon-size-18",
       onclick: target.onMenuClick.bind(target)
     }
   };
