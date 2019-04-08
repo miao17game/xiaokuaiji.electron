@@ -8,18 +8,17 @@
         <icon type="angle-right"></icon>
       </div>
     </div>
+    <div class="address-group">
+      <div class="address-panel">
+        <icon type="unlink"></icon>
+        <span class="address-scope"> xiaoluaiji</span>
+        <span class="address-split"> | </span>
+        <span>{{ currentPath | childUrl: "" }}</span>
+      </div>
+    </div>
     <div class="menu-group">
-      <div class="menu-button" (click)="onDebugClick()">
-        <icon type="plug"></icon>
-      </div>
-      <div class="menu-button" (click)="onSettingsClick()">
-        <icon type="cog" class="normal-icon"></icon>
-      </div>
-      <div class="menu-button" (click)="onMessageBarClick()">
-        <icon type="comments" class="normal-icon"></icon>
-      </div>
-      <div class="menu-button" (click)="onMenuClick()">
-        <icon type="navicon" class="normal-icon"></icon>
+      <div *ngFor="let action of actions" class="menu-button" (click)="action.onclick()">
+        <icon [type]="action.type" [class]="action.class"></icon>
       </div>
     </div>
   </div>

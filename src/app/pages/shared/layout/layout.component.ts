@@ -3,14 +3,6 @@ import { Router } from "@angular/router";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
 
-const routes = {
-  home: "首页",
-  dashboard: "工作台",
-  preference: "偏好设置"
-};
-
-const actions = {};
-
 @Component({
   selector: "app-layout",
   templateUrl: "./layout.html",
@@ -19,7 +11,12 @@ const actions = {};
 export class LayoutComponent implements OnInit {
   public showMenu = false;
   public showMsg = true;
-  public urls: [string, string][] = buildRoutes(routes);
+  public urls = buildRoutes();
+  public actions = buildActions(this);
+
+  public get currentPath() {
+    return this.router.url;
+  }
 
   public get canGoBack() {
     return this.history.canBack;
@@ -62,6 +59,42 @@ export class LayoutComponent implements OnInit {
   }
 }
 
-function buildRoutes(routes: { [key: string]: string }): [string, string][] {
+function buildActions(target: LayoutComponent) {
+  const actions = {
+    debug: {
+      type: "plug",
+      onclick: target.onDebugClick.bind(target)
+    },
+    usercenter: {
+      type: "user-circle",
+      class: "weak-normal-icon",
+      onclick: () => {}
+    },
+    settings: {
+      type: "cog",
+      class: "normal-icon",
+      onclick: target.onSettingsClick.bind(target)
+    },
+    message: {
+      type: "comments",
+      class: "normal-icon",
+      onclick: target.onMessageBarClick.bind(target)
+    },
+    menu: {
+      type: "navicon",
+      class: "normal-icon",
+      onclick: target.onMenuClick.bind(target)
+    }
+  };
+  return Object.keys(actions).map(k => actions[k]);
+}
+
+const routes = {
+  home: "首页",
+  dashboard: "工作台",
+  preference: "偏好设置"
+};
+
+function buildRoutes(): [string, string][] {
   return Object.keys(routes).map<[string, string]>(k => [`/${k}`, routes[k]]);
 }

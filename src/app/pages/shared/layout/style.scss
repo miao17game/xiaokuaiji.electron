@@ -1,9 +1,12 @@
 $primary-color: #1f67d3;
 $primary-weak-color: #3477db;
+$primary-dead-color: #4285e9;
+$safe-color: #1bac88;
 $hover-color: #f0ba55;
 $active-color: #1859bb;
 $msg-box-color: #f8f8f8;
 $font-main-color: #fff;
+$unable-color: #acacac;
 $disable-color: #cdcdcd;
 $enter-duration: 0.45s;
 $leave-duration: 0.25s;
@@ -55,6 +58,10 @@ $leave-duration: 0.25s;
     font-size: 18px;
   }
 
+  .weak-normal-icon {
+    font-size: 16px;
+  }
+
   .message-item {
     border: 1px solid $primary-weak-color;
     padding: 12px;
@@ -72,9 +79,9 @@ $leave-duration: 0.25s;
     padding: 0;
     box-shadow: 0px 0px 8px #00000090;
     box-sizing: border-box;
+    min-height: 50px;
 
     .back-group {
-      flex: 1;
       box-sizing: border-box;
 
       .back-button {
@@ -105,8 +112,30 @@ $leave-duration: 0.25s;
       }
     }
 
-    .menu-group {
+    .address-group {
       flex: 1;
+
+      .address-panel {
+        vertical-align: middle;
+        background-color: #fff;
+        border-radius: 12px;
+        font-size: 14px;
+        margin: 9px 4px;
+        padding: 0 16px;
+        line-height: 32px;
+        color: $primary-dead-color;
+
+        .address-scope {
+          color: $safe-color;
+        }
+
+        .address-split {
+          color: $unable-color;
+        }
+      }
+    }
+
+    .menu-group {
       text-align: right;
       box-sizing: border-box;
 
@@ -156,6 +185,7 @@ $leave-duration: 0.25s;
     .no-display {
       width: 0;
       opacity: 0;
+      padding: 0;
       color: transparent;
       transition: $leave-duration;
 
