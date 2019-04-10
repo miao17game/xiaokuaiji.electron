@@ -1,7 +1,11 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
 div, input, b {
   margin: 0;
   padding: 0;
-  position: relative;
   box-sizing: border-box;
 }
 
@@ -10,14 +14,11 @@ div, input, b {
 }
 
 .toggle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
   width: 60px;
   height: 40px;
   border-radius: 100px;
   background-color: #ddd;
-  margin: -20px -40px;
   overflow: hidden;
   box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 0.05);
 }
@@ -35,7 +36,7 @@ div, input, b {
 }
 
 .check:checked ~ .track {
-  box-shadow: inset 0 0 0 20px #4bd863;
+  box-shadow: inset 0 0 0 20px #4285e9;
 }
 
 .check:checked ~ .switch {
@@ -72,11 +73,12 @@ div, input, b {
   border-radius: 40px;
 }
 
-.toggle-normal {
-  position: absolute;
+.toggle-big {
+  width: 60px;
+  height: 40px;
 }
 
-.toggle-small {
+.toggle-normal {
   width: 40px;
   height: 27px;
 
@@ -86,6 +88,19 @@ div, input, b {
 
   .switch {
     right: 15px;
+  }
+}
+
+.toggle-small {
+  width: 30px;
+  height: 20px;
+
+  .check:checked ~ .switch {
+    left: 12px;
+  }
+
+  .switch {
+    right: 12px;
   }
 }
 

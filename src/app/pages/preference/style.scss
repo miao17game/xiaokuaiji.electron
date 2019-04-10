@@ -1,4 +1,61 @@
 .preferences-container {
   display: flex;
+  flex-direction: column;
   height: 100%;
+  background-color: #f6f6f6;
+
+  .section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    line-height: 32px;
+    padding: 8px 16px;
+    background-color: #fff;
+
+    .label {
+      font-size: 16px;
+    }
+
+    .weak-text {
+      color: #909090;
+      font-size: 12px;
+    }
+
+    .action {
+      text-align: right;
+    }
+  }
+
+  .group {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 0px solid #f3f3f3;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+
+    .title {
+      @extend .section;
+
+      line-height: 24px;
+      padding: 4px 8px;
+      color: #a0a0a0;
+      font-size: 14px;
+      background-color: transparent;
+      border: 0px solid #f3f3f3;
+      border-top-width: 1px;
+    }
+
+    .section {
+      margin-left: 8px;
+      margin-right: 8px;
+      padding: 8px 8px;
+      background-color: transparent;
+      border: 0px solid #f3f3f3;
+      border-top-width: 1px;
+
+      &:first-child {
+        border-top-width: 0;
+      }
+    }
+  }
 }

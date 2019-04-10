@@ -22,4 +22,9 @@ export class PreferenceComponent implements OnInit {
       this.conf.loadConfigs();
     }
   }
+
+  onDarkModeChange(value: boolean) {
+    this.configs.darkMode = value;
+    this.conf.updateConfigs();
+  }
 }

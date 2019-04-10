@@ -11,6 +11,7 @@ export interface IFolderStruct {
 
 export interface IPreferenceConfig {
   updateAt?: number;
+  darkMode?: boolean;
   rootFolder?: string;
 }
 

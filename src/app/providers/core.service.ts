@@ -60,6 +60,19 @@ export class CoreService {
     });
   }
 
+  public preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.ipc.once(ClientEvent.UpdatePreferences, (_: any, result) => {
+        if (result === true) {
+          resolve();
+        } else {
+          reject(result);
+        }
+      });
+      this.ipc.send(ClientEvent.UpdatePreferences, { configs });
+    });
+  }
+
   private getTitle(state: RouterState, parent: ActivatedRoute) {
     const data: string[] = [];
     if (parent && parent.snapshot.data && parent.snapshot.data.title) {

@@ -45,7 +45,7 @@ export function clientEventsHook(win: BrowserWindow, main: typeof ipcMain) {
       updateAt: createStamp()
     };
     try {
-      fs.appendFileSync(PREFERENCE_CONF, JSON.stringify(preferenceConf), { flag: "w+" });
+      fs.appendFileSync(PREFERENCE_CONF, JSON.stringify(preferenceConf, null, "  "), { flag: "w+" });
       event.sender.send(ClientEvent.UpdatePreferences, true);
     } catch (error) {
       event.sender.send(ClientEvent.UpdatePreferences, createUnknownError(error));
@@ -59,7 +59,7 @@ function tryLoadPreference(path = PREFERENCE_CONF) {
   try {
     if (!fs.existsSync(path)) {
       const defaultConfigs = { updateAt: createStamp() };
-      fs.appendFileSync(path, JSON.stringify(defaultConfigs), { flag: "w+" });
+      fs.appendFileSync(path, JSON.stringify(defaultConfigs, null, "  "), { flag: "w+" });
       preferenceConf = defaultConfigs;
     } else {
       const confStr = fs.readFileSync(path).toString();

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 
 @Component({
   selector: "toggle-switch",
@@ -6,8 +6,9 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./style.scss"]
 })
 export class ToggleSwitchComponent implements OnInit {
-  @Input() checked: boolean | string = false;
-  @Input() size: "large" | "small" | "normal" = "normal";
+  @Input() size: "large" | "big" | "small" | "normal" = "normal";
+  @Input() checked: boolean = false;
+  @Output() onChange = new EventEmitter<boolean>();
 
   get css() {
     return {
@@ -18,4 +19,8 @@ export class ToggleSwitchComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  onValueChange(e: any) {
+    this.onChange.emit(e.target.checked);
+  }
 }

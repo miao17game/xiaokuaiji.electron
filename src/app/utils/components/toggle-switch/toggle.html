@@ -1,5 +1,5 @@
 <div class="toggle" [ngClass]="css">
-  <input type="checkbox" [(ngModel)]="checked" class="check" />
+  <input type="checkbox" [value]="checked" [checked]="checked" (change)="onValueChange($event)" class="check" />
   <b class="b switch"></b>
   <b class="b track"></b>
 </div>
