@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter, ContentChild, TemplateRef } from "@angular/core";
 import { IFolderStruct } from "../../../../../utils/metadata";
 import { Source } from "webpack-sources";
 
@@ -21,6 +21,10 @@ export class FolderListComponent implements OnInit, OnChanges {
   @Output() onFolderClick = new EventEmitter<IFolderStruct>();
   @Output() onFileClick = new EventEmitter<string>();
 
+  @ContentChild("fileContext") fileContext: TemplateRef<any>;
+  @ContentChild("folderTitle") folderTitle: TemplateRef<any>;
+  @ContentChild("folderHeader") folderHeader: TemplateRef<any>;
+
   private viewContext: IViewContext = {
     exist: false,
     path: "",
@@ -34,7 +38,10 @@ export class FolderListComponent implements OnInit, OnChanges {
     return this.viewContext || { exist: false };
   }
 
-  constructor() {}
+  constructor() {
+    this.onExpanded = this.onExpanded.bind(this);
+    this.onFileTapped = this.onFileTapped.bind(this);
+  }
 
   ngOnInit(): void {}
 

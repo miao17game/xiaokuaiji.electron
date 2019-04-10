@@ -18,15 +18,35 @@
         *ngIf="files.length > 0"
         [ngClass]="{ 'files-root': isroot, 'files-no-folders': folders.length === 0 && !isroot }"
       >
-        <div *ngFor="let file of files" class="single-file" (click)="onFileTapped(file)">
-          {{ file | childUrl: path }}
+        <ng-container *ngTemplateOutlet="folderHeader || defaultFolderHeader; context: { path: path }"></ng-container>
+        <div *ngFor="let file of files" class="single-file">
+          <ng-container
+            *ngTemplateOutlet="
+              fileContext || defaultFileContext;
+              context: {
+                file: file,
+                path: path,
+                event: onFileTapped
+              }
+            "
+          >
+          </ng-container>
         </div>
       </div>
       <div class="folder-group" *ngIf="folders.length > 0">
         <ng-container *ngFor="let folder of folders">
-          <div class="single-folder" [ngClass]="{ opened: folder.expanded }" (click)="onExpanded(folder)">
-            <icon type="angle-down" class="exp-icon"></icon>
-            <span>{{ folder.path | childUrl: path }}</span>
+          <div class="single-folder">
+            <ng-container
+              *ngTemplateOutlet="
+                folderTitle || defaultFolderTitle;
+                context: {
+                  folder: folder,
+                  path: path,
+                  event: onExpanded
+                }
+              "
+            >
+            </ng-container>
           </div>
           <ng-container>
             <ng-container *ngTemplateOutlet="folderComp; context: folder"></ng-container>
@@ -42,3 +62,18 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #defaultFileContext let-file="file" let-path="path" let-event="event">
+  <div (click)="event(file)">
+    <span>{{ file | childUrl: path }}</span>
+  </div>
+</ng-template>
+
+<ng-template #defaultFolderTitle let-folder="folder" let-path="path" let-event="event">
+  <div [ngClass]="{ opened: folder.expanded }" (click)="event(folder)">
+    <icon type="angle-down" class="exp-icon"></icon>
+    <span>{{ folder.path | childUrl: path }}</span>
+  </div>
+</ng-template>
+
+<ng-template #defaultFolderHeader></ng-template>

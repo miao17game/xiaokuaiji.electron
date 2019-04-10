@@ -8,6 +8,22 @@
     padding-bottom: 4px;
   }
 
+  .folder-header-group {
+    padding: 4px;
+    padding-bottom: 0;
+    padding-left: 0;
+  }
+
+  .file-flex-group {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 6px;
+
+    .file-name {
+      cursor: pointer;
+    }
+  }
+
   .root-not-exist {
     display: flex;
     justify-content: space-between;

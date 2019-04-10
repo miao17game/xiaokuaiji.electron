@@ -10,18 +10,13 @@ div {
   box-sizing: border-box;
 }
 
-// $dark-mode: #404040;
-// $light-mode: #ececec;
+a {
+  color: #1f67d3;
+  font-size: 12px;
+  cursor: pointer;
+}
 
 .global-theme {
   background-color: transparent;
   font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-// .dark-theme {
-//   background-color: $dark-mode;
-// }
-
-// .light-theme {
-//   background-color: $light-mode;
-// }
