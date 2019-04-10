@@ -35,8 +35,17 @@ div, input, b {
   z-index: 6;
 }
 
+.check:disabled {
+  cursor: unset;
+}
+
 .check:checked ~ .track {
   box-shadow: inset 0 0 0 20px #4285e9;
+}
+
+.check:disabled ~ .track {
+  box-shadow: inset 0 0 0 20px #dcdcdc;
+  cursor: unset;
 }
 
 .check:checked ~ .switch {
@@ -45,6 +54,11 @@ div, input, b {
   transition: 0.35s cubic-bezier(0.785, 0.135, 0.15, 0.86);
   transition-property: left, right;
   transition-delay: .05s, 0s;
+}
+
+.check:disabled ~ .switch {
+  background-color: #f3f3f3;
+  cursor: unset;
 }
 
 .switch {

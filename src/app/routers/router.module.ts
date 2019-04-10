@@ -4,6 +4,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "../pages/dashboard/dashboard.component";
 import { LayoutComponent } from "../pages/shared/layout/layout.component";
 import { PreferenceComponent } from "../pages/preference/preference.component";
+import { UserCenterComponent } from "../pages/user-center/user.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,11 @@ const routes: Routes = [
         path: "preference",
         component: PreferenceComponent,
         data: { title: "偏好设置" }
+      },
+      {
+        path: "usercenter",
+        component: UserCenterComponent,
+        data: { title: "个人中心" }
       }
     ]
   }

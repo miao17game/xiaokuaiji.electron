@@ -57,6 +57,10 @@ export class LayoutComponent implements OnInit {
   onSettingsClick() {
     this.router.navigateByUrl("/preference");
   }
+
+  onUserCenterClick() {
+    this.router.navigateByUrl("/usercenter");
+  }
 }
 
 function buildActions(target: LayoutComponent) {
@@ -69,7 +73,7 @@ function buildActions(target: LayoutComponent) {
     usercenter: {
       type: "user-circle",
       class: "icon-size-17",
-      onclick: () => {}
+      onclick: target.onUserCenterClick.bind(target)
     },
     settings: {
       type: "cog",

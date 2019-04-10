@@ -8,6 +8,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 export class ToggleSwitchComponent implements OnInit {
   @Input() size: "large" | "big" | "small" | "normal" = "normal";
   @Input() checked: boolean = false;
+  @Input() disabled: boolean;
   @Output() onChange = new EventEmitter<boolean>();
 
   get css() {
