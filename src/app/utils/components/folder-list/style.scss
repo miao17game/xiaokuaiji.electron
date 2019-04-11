@@ -8,7 +8,8 @@
     flex-direction: column;
     flex: 1;
     padding-left: 8px;
-    margin-bottom: 4px;
+
+    // margin-bottom: 4px;
     box-sizing: border-box;
     border: 1px solid #ececec;
     border-bottom-width: 0;
@@ -24,15 +25,21 @@
         line-height: 28px;
         background-color: transparent;
         font-size: 14px;
+        margin-left: -1px;
+        transition: 0.5s;
+
+        &:hover {
+          background-color: #f9f9f9;
+        }
       }
     }
 
     .files-root {
-      padding-left: 12px;
+      padding-left: 12px !important;
     }
 
     .files-no-folders {
-      border-bottom-width: 0;
+      border-bottom-width: 0 !important;
     }
 
     .folder-group {
@@ -42,6 +49,10 @@
       margin-bottom: 0;
       border: 0px solid #ececec;
       border-bottom-width: 1px;
+
+      &:last-child {
+        margin-bottom: 4px;
+      }
 
       .single-folder {
         background-color: #f3f3f3;
@@ -60,14 +71,19 @@
           width: 12px;
           height: 12px;
           color: #303030;
+          transition: 0.5s;
         }
       }
 
       .opened {
         .exp-icon {
-          transform: rotate(180deg) translateY(-2px);
+          transform: rotate(180deg) translateY(-4px);
         }
       }
+    }
+
+    .folder-root {
+      margin-bottom: 0 !important;
     }
 
     .no-file {
@@ -93,8 +109,8 @@
     }
   }
 
-  .folder-root {
-    padding-left: 0;
+  .container-root {
+    padding-left: 0 !important;
   }
 
   .folder-closed {

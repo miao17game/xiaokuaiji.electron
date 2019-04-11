@@ -11,7 +11,7 @@
   let-folders="folders"
   let-path="path"
 >
-  <div class="folder-container" [ngClass]="{ 'folder-closed': !expanded, 'folder-root': isroot }">
+  <div class="folder-container" [ngClass]="{ 'folder-closed': !expanded, 'container-root': isroot }">
     <ng-container *ngIf="exist">
       <div
         class="file-group"
@@ -33,7 +33,7 @@
           </ng-container>
         </div>
       </div>
-      <div class="folder-group" *ngIf="folders.length > 0">
+      <div class="folder-group" *ngIf="folders.length > 0" [ngClass]="{ 'folder-root': isroot }">
         <ng-container *ngFor="let folder of folders">
           <div class="single-folder">
             <ng-container
