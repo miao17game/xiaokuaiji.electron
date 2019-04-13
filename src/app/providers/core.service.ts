@@ -40,10 +40,10 @@ export class CoreService {
     });
   }
 
-  public dashboardFetch(): Promise<IFolderStruct> {
+  public dashboardFetch(subPath?: string): Promise<IFolderStruct> {
     return new Promise<IFolderStruct>((resolve, reject) => {
       this.ipc.once(ClientEvent.FetchFiles, (_: any, result: { files: IFolderStruct }) => resolve(result.files));
-      this.ipc.send(ClientEvent.FetchFiles, { showHideFiles: false });
+      this.ipc.send(ClientEvent.FetchFiles, { folderPath: subPath, showHideFiles: false, lazyLoad: true });
     });
   }
 

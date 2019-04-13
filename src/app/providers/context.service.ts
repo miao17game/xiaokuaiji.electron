@@ -1,18 +1,19 @@
 import { Injectable } from "@angular/core";
-import { Subject, Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 import { IFolderStruct } from "../../../utils/metadata";
 import { CoreService } from "./core.service";
 
 const subjects = {
   dashboard: {
     subject: new BehaviorSubject<IFolderStruct>({
+      loaded: false,
       exist: true,
       path: "",
       files: [],
       folders: []
     }),
     init: (core: CoreService) => core.dashboardFetch.call(core),
-    actions: (subject: Subject<IFolderStruct>, core: CoreService) => ({
+    actions: (subject: BehaviorSubject<IFolderStruct>, core: CoreService) => ({
       async referesh(onFinally: () => void) {
         try {
           const newData = await core.dashboardFetch.call(core);
@@ -24,6 +25,15 @@ const subjects = {
       async init(onSuccess: () => void) {
         await core.dashboardInit.call(core);
         onSuccess();
+      },
+      async loadPart(currentRef: IFolderStruct, onSuccess?: (path: string) => void) {
+        const lastData = subject.getValue();
+        const newData = await core.dashboardFetch.call(core, currentRef.path);
+        currentRef.files = newData.files;
+        currentRef.folders = newData.folders;
+        currentRef.loaded = true;
+        subject.next({ ...lastData });
+        onSuccess && onSuccess(currentRef.path);
       }
     })
   }
@@ -53,8 +63,8 @@ export class ContextService {
 }
 
 interface IEachSubject<T, A extends { [prop: string]: any }> {
-  subject: Subject<T>;
-  actions: (subject: Subject<T>, ...args: any[]) => A;
+  subject: BehaviorSubject<T>;
+  actions: (subject: BehaviorSubject<T>, ...args: any[]) => A;
   init?(...args: any[]): Promise<T>;
 }
 

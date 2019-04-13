@@ -2,7 +2,8 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
 import * as url from "url";
 
-import { clientEventsHook } from "./utils/works/client";
+import { EventLoader } from "./utils/loaders";
+import { ClientEvent } from "./utils/constants/events";
 
 let win: BrowserWindow, serve: boolean;
 const args = process.argv.slice(1);
@@ -55,7 +56,12 @@ function createWindow() {
     win = null;
   });
 
-  clientEventsHook(win, ipcMain);
+  new EventLoader(win, ipcMain)
+    .register(ClientEvent.DebugMode, "openCloseDevTool")
+    .register(ClientEvent.FetchFiles, "readLocalFiles")
+    .register(ClientEvent.InitAppFolder, "initAppFolder")
+    .register(ClientEvent.FetchPreferences, "fetchPreference")
+    .register(ClientEvent.UpdatePreferences, "updatePreference");
 }
 
 try {

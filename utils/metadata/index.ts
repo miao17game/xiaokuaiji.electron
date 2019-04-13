@@ -1,8 +1,11 @@
 export interface IFilesFetchContext {
+  folderPath?: string;
   showHideFiles?: boolean;
+  lazyLoad?: boolean;
 }
 
 export interface IFolderStruct {
+  loaded: boolean;
   exist: boolean;
   path: string;
   files: string[];
@@ -16,6 +19,7 @@ export interface IPreferenceConfig {
 }
 
 export enum ErrorCode {
+  Default = -1,
   Unknown = 0,
   PreferenceNotFound = 1
 }

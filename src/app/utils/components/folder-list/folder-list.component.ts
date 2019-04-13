@@ -1,14 +1,14 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, ContentChild, TemplateRef } from "@angular/core";
 import { IFolderStruct } from "../../../../../utils/metadata";
-import { Source } from "webpack-sources";
 
 interface IViewContext {
+  loaded: boolean;
   exist: boolean;
   path: string;
   files: string[];
   folders: IViewContext[];
-  expanded: boolean;
-  isRoot: boolean;
+  expanded?: boolean;
+  isRoot?: boolean;
 }
 
 @Component({
@@ -26,6 +26,7 @@ export class FolderListComponent implements OnInit, OnChanges {
   @ContentChild("folderHeader") folderHeader: TemplateRef<any>;
 
   private viewContext: IViewContext = {
+    loaded: false,
     exist: false,
     path: "",
     files: [],
@@ -51,6 +52,7 @@ export class FolderListComponent implements OnInit, OnChanges {
         this.viewContext = buildViewContext(changes[key].currentValue);
         this.viewContext.expanded = true;
         this.viewContext.isRoot = true;
+        this.viewContext.loaded = true;
       }
     }
   }
@@ -66,22 +68,9 @@ export class FolderListComponent implements OnInit, OnChanges {
 }
 
 function buildViewContext(source: IFolderStruct): IViewContext {
-  return {
-    exist: source.exist,
-    path: source.path,
-    files: source.files || [],
-    folders: (source.folders || []).map(i => buildViewContext(i)),
-    expanded: false,
-    isRoot: false
-  };
+  return source;
 }
 
 function readFilesResult(source: IViewContext): IFolderStruct {
-  const { exist, path, files, folders } = source;
-  return {
-    exist,
-    path,
-    files,
-    folders: folders.map(i => readFilesResult(i))
-  };
+  return source;
 }

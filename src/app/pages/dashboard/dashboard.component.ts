@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ContextService } from "../../providers/context.service";
+import { IFolderStruct } from "../../../../utils/metadata";
 
 @Component({
   selector: "app-dashboard",
@@ -36,5 +37,11 @@ export class DashboardComponent implements OnInit {
 
   onFileSelect(path: string) {
     console.log(path);
+  }
+
+  onFolderClick(folderRef: IFolderStruct) {
+    if (!folderRef.loaded) {
+      this.actions.loadPart(folderRef);
+    }
   }
 }
