@@ -33,16 +33,9 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
     }
   }
 
-  public readLocalFiles({ folderPath = undefined, showHideFiles = false, lazyLoad = false }) {
-    let p: string = ROOT_FOLDER;
-    if (folderPath) {
-      if (folderPath.startsWith(OS_HOME)) {
-        p = folderPath;
-      } else {
-        p = path.join(OS_HOME, folderPath);
-      }
-    }
-    const fies = readFiles(p, true, showHideFiles, lazyLoad);
+  public readLocalFiles({ folderPath = undefined, showHideFiles = false, lazyLoad = true }) {
+    const folder = connectFolder(folderPath);
+    const fies = readFiles({ path: folder, isRoot: true, showHideFiles, lazyLoad });
     return {
       files: {
         ...fies,
@@ -81,6 +74,18 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
   }
 }
 
+function connectFolder(folderPath: string | undefined) {
+  let p: string = ROOT_FOLDER;
+  if (folderPath) {
+    if (folderPath.startsWith(OS_HOME)) {
+      p = folderPath;
+    } else {
+      p = path.join(OS_HOME, folderPath);
+    }
+  }
+  return p;
+}
+
 function tryLoadPreference(path = PREFERENCE_CONF) {
   let error: AppError;
   let preferenceConf: IPreferenceConfig;
@@ -108,7 +113,15 @@ function tryLoadPreference(path = PREFERENCE_CONF) {
   return { configs: preferenceConf, error };
 }
 
-function readFiles(thisPath: string, isRoot = false, showHideFiles = false, lazyLoad = false) {
+interface IReadFileOptions {
+  path: string;
+  isRoot: boolean;
+  showHideFiles: boolean;
+  lazyLoad: boolean;
+}
+
+function readFiles(options: IReadFileOptions) {
+  const { path: thisPath, isRoot = false, lazyLoad = false, showHideFiles = false } = options;
   const result: IFileFetchResult = {
     loaded: false,
     exist: false,
@@ -128,7 +141,7 @@ function readFiles(thisPath: string, isRoot = false, showHideFiles = false, lazy
     if (lazyLoad && !isRoot) break;
     const status = fs.lstatSync(each);
     if (status.isDirectory()) {
-      result.folders.push(readFiles(each, false, showHideFiles, lazyLoad));
+      result.folders.push(readFiles({ ...options, path: each, isRoot: false }));
     } else if (status.isFile()) {
       result.files.push(each);
     }

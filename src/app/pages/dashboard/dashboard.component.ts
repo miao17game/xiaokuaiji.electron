@@ -20,19 +20,21 @@ export class DashboardComponent implements OnInit {
     return this.context.observer;
   }
 
-  public loading = false;
-
   constructor(private ctx: ContextService) {}
 
   ngOnInit() {}
 
   async onRefresh() {
-    this.loading = true;
-    this.actions.referesh(() => (this.loading = false));
+    this.actions.resetLoading(true);
+    await this.actions.referesh();
+    setTimeout(() => {
+      this.actions.resetLoading(false);
+    }, 500);
   }
 
   async initRootFolder() {
-    this.actions.init(() => this.onRefresh());
+    await this.actions.initAppRoot();
+    this.onRefresh();
   }
 
   onFileSelect(path: string) {
