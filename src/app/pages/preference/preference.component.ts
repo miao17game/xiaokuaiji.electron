@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ConfigsService } from "../../providers/configs.service";
+import { ContextService } from "../../providers/context.service";
 
 @Component({
   selector: "app-preference",
@@ -7,24 +7,19 @@ import { ConfigsService } from "../../providers/configs.service";
   styleUrls: ["./style.scss"]
 })
 export class PreferenceComponent implements OnInit {
-  get loading() {
-    return !this.conf.configs.init;
+  get dataAsync() {
+    return this.context.datasets.preference;
   }
 
-  get configs() {
-    return this.conf.configs;
+  get actions() {
+    return this.context.actions.preference;
   }
 
-  constructor(private conf: ConfigsService) {}
+  constructor(private context: ContextService) {}
 
-  ngOnInit() {
-    if (!this.configs.init) {
-      this.conf.loadConfigs();
-    }
-  }
+  ngOnInit() {}
 
   onDarkModeChange(value: boolean) {
-    this.configs.darkMode = value;
-    this.conf.updateConfigs();
+    this.actions.updateConfigs({ darkMode: value });
   }
 }

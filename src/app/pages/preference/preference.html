@@ -1,17 +1,13 @@
-<loading [show]="loading">
+<loading *ngIf="(dataAsync | async) as data" [show]="!data.init">
   <div class="preferences-container">
     <div class="group">
       <div class="title">通用设置</div>
       <div class="section">
         <div class="label">夜间模式</div>
-        <toggle-switch
-          class="action"
-          [checked]="configs.darkMode"
-          (onChange)="onDarkModeChange($event)"
-        ></toggle-switch>
+        <toggle-switch class="action" [checked]="data.darkMode" (onChange)="onDarkModeChange($event)"></toggle-switch>
       </div>
       <div class="section">
-        <div class="label weak-text">最后更新日期：{{ configs.updateAt | date: "yyyy-MM-dd hh:mm:ss" }}</div>
+        <div class="label weak-text">最后更新日期：{{ data.updateAt | date: "yyyy-MM-dd hh:mm:ss" }}</div>
       </div>
     </div>
   </div>

@@ -1,31 +1,17 @@
 import { Injectable } from "@angular/core";
+import { ContextCenter } from "../helpers/context";
 import { CoreService } from "./core.service";
-import { createRules, IDepts } from "./models/context.base";
-import { DashboardActions as DASHBOARD } from "./models/dashbord.model";
+import { DashboardContext as DASHBOARD } from "./models/dashbord.model";
+import { PreferenceContext as PREFERENCE } from "./models/preference.model";
+
+const observers = { dashboard: DASHBOARD, preference: PREFERENCE };
 
 @Injectable()
-export class ContextService {
-  private observables = createRules(
-    {
-      dashboard: DASHBOARD
-    },
-    () => <IDepts>{ core: this["core"] }
-  );
-
-  get dashboard() {
-    return this.observables.dashboard;
-  }
-
-  constructor(private core: CoreService) {
-    this.initServices();
-  }
-
-  private initServices() {
-    Object.keys(this.observables).forEach(async (name: string) => {
-      const actions = this.observables[name].actions;
-      if (actions["init"] && typeof actions["init"] === "function") {
-        actions.init();
-      }
-    });
+export class ContextService extends ContextCenter<typeof observers> {
+  constructor(core: CoreService) {
+    super();
+    this.createRules(observers);
+    this.inject(CoreService, () => core);
+    this.finalize();
   }
 }

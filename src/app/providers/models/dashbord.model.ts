@@ -1,14 +1,15 @@
-import { IDepts, Actions, SourceUpdate, Behavior } from "./context.base";
+import { Actions, SourceUpdate, Context } from "../../helpers/context";
 import { IFolderStruct } from "../../../../utils/metadata";
+import { CoreService } from "../core.service";
 
-interface IState {
+interface IDashboardState {
   loading: boolean;
   folders: IFolderStruct;
 }
 
-export class DashboardActions extends Actions<IState, IDepts> {
-  @Behavior()
-  private readonly behavior: IState = {
+@Context()
+export class DashboardContext extends Actions<IDashboardState> {
+  protected readonly behavior: IDashboardState = {
     loading: true,
     folders: {
       loaded: false,
@@ -19,12 +20,8 @@ export class DashboardActions extends Actions<IState, IDepts> {
     }
   };
 
-  get core() {
-    return this.references.core;
-  }
-
-  constructor(references: IDepts) {
-    super(references);
+  constructor(private core: CoreService) {
+    super();
   }
 
   public async init() {

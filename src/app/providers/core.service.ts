@@ -4,14 +4,26 @@ import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
 import { ClientEvent } from "../../../utils/constants/events";
 import { IFolderStruct, IPreferenceConfig } from "../../../utils/metadata";
+import { IpcPromiseLoader, DefineResolve, DefineValidate, DefineReject } from "../helpers/ipc-promise";
+
+interface ICoreContract {
+  debugToolSwitch(): void;
+  dashboardInit(): Promise<void>;
+  dashboardFetch(subPath?: string): Promise<IFolderStruct>;
+  preferenceFetch(): Promise<IPreferenceConfig>;
+  preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void>;
+}
 
 @Injectable()
-export class CoreService {
-  get ipc() {
-    return this.electron.ipcRenderer;
+export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICoreContract {
+  constructor(private title: Title, electron: ElectronService) {
+    super(electron.ipcRenderer);
+    this.register(ClientEvent.DebugMode, "debugToolSwitch");
+    this.register(ClientEvent.InitAppFolder, "dashboardInit");
+    this.register(ClientEvent.FetchFiles, "dashboardFetch");
+    this.register(ClientEvent.FetchPreferences, "preferenceFetch");
+    this.register(ClientEvent.UpdatePreferences, "preferenceUpdate");
   }
-
-  constructor(private title: Title, private electron: ElectronService) {}
 
   public initRouter(router: Router, afterNavigate: (router: Router) => void) {
     router.events.subscribe(event => {
@@ -24,53 +36,32 @@ export class CoreService {
   }
 
   public debugToolSwitch() {
-    this.ipc.send(ClientEvent.DebugMode, {});
+    return this.send();
   }
 
-  public dashboardInit(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.ipc.once(ClientEvent.InitAppFolder, (_: any, result) => {
-        if (result === true) {
-          resolve();
-        } else {
-          reject(result);
-        }
-      });
-      this.ipc.send(ClientEvent.InitAppFolder, {});
-    });
+  @DefineResolve(() => undefined)
+  @DefineValidate(r => r === true)
+  public dashboardInit() {
+    return this.promise();
   }
 
+  @DefineResolve(({ files }) => files)
+  @DefineValidate(() => true)
   public dashboardFetch(subPath?: string): Promise<IFolderStruct> {
-    return new Promise<IFolderStruct>((resolve, reject) => {
-      this.ipc.once(ClientEvent.FetchFiles, (_: any, result: { files: IFolderStruct }) => resolve(result.files));
-      this.ipc.send(ClientEvent.FetchFiles, { folderPath: subPath, showHideFiles: false, lazyLoad: true });
-    });
+    return this.promise({ folderPath: subPath, showHideFiles: false, lazyLoad: true });
   }
 
+  @DefineResolve(({ configs }) => configs)
+  @DefineReject(({ error }) => error)
+  @DefineValidate(({ error }) => !error)
   public preferenceFetch(): Promise<IPreferenceConfig> {
-    return new Promise((resolve, reject) => {
-      this.ipc.once(ClientEvent.FetchPreferences, (_: any, { configs, error }) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(configs);
-        }
-      });
-      this.ipc.send(ClientEvent.FetchPreferences, {});
-    });
+    return this.promise();
   }
 
+  @DefineResolve(() => undefined)
+  @DefineValidate(r => r === true)
   public preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.ipc.once(ClientEvent.UpdatePreferences, (_: any, result) => {
-        if (result === true) {
-          resolve();
-        } else {
-          reject(result);
-        }
-      });
-      this.ipc.send(ClientEvent.UpdatePreferences, { configs });
-    });
+    return this.promise(configs);
   }
 
   private getTitle(state: RouterState, parent: ActivatedRoute) {
