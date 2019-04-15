@@ -5,6 +5,7 @@ const RESOLVES = Symbol.for("@resolves");
 const REJECTS = Symbol.for("@rejects");
 const VALIDATES = Symbol.for("@validates");
 const GLOBAL = Symbol.for("@global");
+const REGISTERS = Symbol.for("@registers");
 
 const defaultExtraxt = (data: any) => data;
 const defaultValidate = (data: any) => !!data;
@@ -14,6 +15,13 @@ export class IpcPromiseLoader<T extends {} = {}> {
 
   constructor(private ipc: typeof ipcRenderer) {
     this.descriptors = Object.getOwnPropertyDescriptors(this);
+    const prototype = Object.getPrototypeOf(this);
+    const { [REGISTERS]: registers = {} } = prototype;
+    console.log(registers);
+    Object.keys(registers).forEach(methodName => {
+      const key = registers[methodName].value;
+      this.register(key, <any>methodName);
+    });
   }
 
   protected promise<I = {}, T = void>(send?: I): Promise<T> {
@@ -26,7 +34,9 @@ export class IpcPromiseLoader<T extends {} = {}> {
 
   public register<K extends keyof IpcPromiseLoader | keyof T>(eventKey: string, target: K): IpcPromiseLoader;
   public register(key: string, action: string) {
+    console.log([key, action]);
     if (this.checkProtoMethod(this[action])) {
+      console.log([key, action]);
       const prototype = Object.getPrototypeOf(this);
       const descriptor = Object.getOwnPropertyDescriptor(prototype, action);
       const { [RESOLVES]: resolves = {}, [REJECTS]: rejects = {}, [VALIDATES]: validates = {} } = prototype;
@@ -64,6 +74,31 @@ export class IpcPromiseLoader<T extends {} = {}> {
   private checkProtoMethod(target: Function) {
     return Object.keys(this.descriptors).findIndex(name => this.descriptors[name].value === target);
   }
+}
+
+interface IIPCOptions {
+  resolve: (data: any) => any;
+  reject: (data: any) => any;
+  validate: (data: any) => boolean;
+}
+
+export function Contract(register: string, options: Partial<IIPCOptions> = {}) {
+  return function define_contract(prototype: any, propertyKey: string) {
+    Register(register)(prototype, propertyKey);
+    if (options.resolve) DefineResolve(options.resolve)(prototype, propertyKey);
+    if (options.reject) DefineReject(options.reject)(prototype, propertyKey);
+    if (options.validate) DefineValidate(options.validate)(prototype, propertyKey);
+  };
+}
+
+export function Register(registerKey: string) {
+  return function register(prototype: any, propertyKey: string) {
+    const proto = prototype;
+    const registers = proto[REGISTERS] || (proto[REGISTERS] = {});
+    registers[propertyKey] = {
+      value: registerKey
+    };
+  };
 }
 
 export function DefineResolve(resolve?: (data: any) => any) {

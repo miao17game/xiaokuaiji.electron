@@ -4,7 +4,7 @@ import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
 import { ClientEvent } from "../../../utils/constants/events";
 import { IFolderStruct, IPreferenceConfig } from "../../../utils/metadata";
-import { IpcPromiseLoader, DefineResolve, DefineValidate, DefineReject } from "../helpers/ipc-promise";
+import { IpcPromiseLoader, DefineValidate, Contract } from "../helpers/ipc-promise";
 
 interface ICoreContract {
   debugToolSwitch(): void;
@@ -15,14 +15,10 @@ interface ICoreContract {
 }
 
 @Injectable()
+@DefineValidate(r => r === true)
 export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICoreContract {
   constructor(private title: Title, electron: ElectronService) {
     super(electron.ipcRenderer);
-    this.register(ClientEvent.DebugMode, "debugToolSwitch");
-    this.register(ClientEvent.InitAppFolder, "dashboardInit");
-    this.register(ClientEvent.FetchFiles, "dashboardFetch");
-    this.register(ClientEvent.FetchPreferences, "preferenceFetch");
-    this.register(ClientEvent.UpdatePreferences, "preferenceUpdate");
   }
 
   public initRouter(router: Router, afterNavigate: (router: Router) => void) {
@@ -35,31 +31,38 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     });
   }
 
+  @Contract(ClientEvent.DebugMode)
   public debugToolSwitch() {
     return this.send();
   }
 
-  @DefineResolve(() => undefined)
-  @DefineValidate(r => r === true)
+  @Contract(ClientEvent.InitAppFolder, {
+    resolve: () => undefined
+  })
   public dashboardInit() {
     return this.promise();
   }
 
-  @DefineResolve(({ files }) => files)
-  @DefineValidate(() => true)
+  @Contract(ClientEvent.FetchFiles, {
+    resolve: ({ files }) => files,
+    validate: () => true
+  })
   public dashboardFetch(subPath?: string): Promise<IFolderStruct> {
     return this.promise({ folderPath: subPath, showHideFiles: false, lazyLoad: true });
   }
 
-  @DefineResolve(({ configs }) => configs)
-  @DefineReject(({ error }) => error)
-  @DefineValidate(({ error }) => !error)
+  @Contract(ClientEvent.FetchPreferences, {
+    resolve: ({ configs }) => configs,
+    reject: ({ error }) => error,
+    validate: ({ error }) => !error
+  })
   public preferenceFetch(): Promise<IPreferenceConfig> {
     return this.promise();
   }
 
-  @DefineResolve(() => undefined)
-  @DefineValidate(r => r === true)
+  @Contract(ClientEvent.UpdatePreferences, {
+    resolve: () => undefined
+  })
   public preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void> {
     return this.promise(configs);
   }
