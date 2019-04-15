@@ -9,7 +9,7 @@ interface IDashboardState {
 
 @Context()
 export class DashboardContext extends Actions<IDashboardState> {
-  protected readonly behavior: IDashboardState = {
+  protected readonly initial: IDashboardState = {
     loading: true,
     folders: {
       loaded: false,

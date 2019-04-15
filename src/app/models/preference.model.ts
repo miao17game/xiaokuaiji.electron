@@ -14,7 +14,7 @@ const defaultConfigs: IPreferenceState = {
 
 @Context()
 export class PreferenceContext extends Actions<IPreferenceState> {
-  protected behavior: IPreferenceState = defaultConfigs;
+  protected readonly initial: IPreferenceState = defaultConfigs;
 
   constructor(private core: CoreService) {
     super();

@@ -81,14 +81,14 @@ function createRules<T extends any>(subjects: T): IContextRules<T> {
 }
 
 export abstract class Actions<T> {
-  protected abstract readonly behavior: Partial<T>;
+  protected abstract readonly initial: Partial<T>;
 
   private __subject!: BehaviorSubject<T>;
   private currentTick: Partial<T> = {};
   private currentTimer: number;
 
   protected get subject(): BehaviorSubject<T> {
-    return this.__subject || (this.__subject = new BehaviorSubject(<any>this.behavior || null));
+    return this.__subject || (this.__subject = new BehaviorSubject(<any>this.initial || null));
   }
 
   protected get last() {
