@@ -84,8 +84,9 @@ export abstract class Actions<T> {
   protected abstract readonly initial: Partial<T>;
 
   private __subject!: BehaviorSubject<T>;
-  private currentTick: Partial<T> = {};
-  private currentTimer: number;
+  private __lastProxy!: T;
+  private __current: Partial<T> = {};
+  private __timer: number;
 
   protected get subject(): BehaviorSubject<T> {
     return this.__subject || (this.__subject = new BehaviorSubject(<any>this.initial || null));
@@ -95,18 +96,42 @@ export abstract class Actions<T> {
     return this.subject.getValue();
   }
 
+  private initLastProxy(): T {
+    const lastDelegate = this.__current;
+    return (this.__lastProxy = new Proxy(<any>this.subject.getValue(), {
+      set(_, key, value) {
+        lastDelegate[key] = value;
+        return true;
+      },
+      get(target, key) {
+        if (key in lastDelegate) return lastDelegate[key];
+        return target[key];
+      },
+      enumerate(target) {
+        const sourceKeys = Object.keys(target);
+        const proxyKeys = Object.keys(lastDelegate);
+        const add: string[] = [];
+        for (const k of proxyKeys) {
+          if (sourceKeys.indexOf(k) < 0) add.push(k);
+        }
+        return [...sourceKeys, ...add];
+      }
+    }));
+  }
+
   protected update(data: Partial<T> = {}) {
-    clearTimeout(this.currentTimer);
-    this.currentTick = {
-      ...this.currentTick,
+    clearTimeout(this.__timer);
+    this.__current = {
+      ...this.__current,
       ...data
     };
-    this.currentTimer = setTimeout(() => {
+    this.__timer = setTimeout(() => {
       this.subject.next({
-        ...this.last,
-        ...this.currentTick
+        ...this.subject.getValue(),
+        ...this.__current
       });
-      this.currentTick = {};
+      this.__current = {};
+      this.__lastProxy = undefined;
     });
   }
 }
@@ -125,7 +150,8 @@ export function SourceUpdate() {
   ) {
     const source = descriptor.value;
     descriptor.value = async function(this: T, ...args: any[]) {
-      await source.call(this, ...args);
+      const last = this["initLastProxy"]();
+      await source.call({ ...this, last }, ...args);
       this["update"]();
     };
     Object.defineProperty(prototype, propertyKay, descriptor);
