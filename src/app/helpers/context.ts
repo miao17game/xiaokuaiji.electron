@@ -136,7 +136,7 @@ export class ContextCenter<T> {
   private _generator: IContextRules<T>;
   private _datasets: ObserverMap<T>;
   private _actions: ActionMap<T>;
-  protected readonly observables: ContextMap<T>;
+  protected readonly behaviors: ContextMap<T>;
 
   public get datasets(): ObserverMap<T> {
     return this._datasets;
@@ -157,20 +157,20 @@ export class ContextCenter<T> {
   }
 
   protected finalize() {
-    (<any>this.observables) = this._generator.create();
-    const obseverKeys = Object.keys(this.observables);
+    (<any>this.behaviors) = this._generator.create();
+    const obseverKeys = Object.keys(this.behaviors);
     this._datasets = obseverKeys
-      .map(name => [name, this.observables[name].observer])
+      .map(name => [name, this.behaviors[name].observer])
       .reduce<any>((pre, [name, observer]) => ({ ...pre, [name]: observer }), {});
     this._actions = obseverKeys
-      .map(name => [name, this.observables[name].actions])
+      .map(name => [name, this.behaviors[name].actions])
       .reduce<any>((pre, [name, actions]) => ({ ...pre, [name]: actions }), {});
     this.init();
   }
 
   protected async init() {
-    Object.keys(this.observables).forEach(async (name: string) => {
-      const actions = this.observables[name].actions;
+    Object.keys(this.behaviors).forEach(async (name: string) => {
+      const actions = this.behaviors[name].actions;
       if (actions["init"] && typeof actions["init"] === "function") {
         actions.init();
       }
