@@ -98,25 +98,28 @@ export abstract class Actions<T> {
 
   private initLastProxy(): T {
     const lastDelegate = this.__current;
-    return (this.__lastProxy = new Proxy(<any>this.subject.getValue(), {
-      set(_, key, value) {
-        lastDelegate[key] = value;
-        return true;
-      },
-      get(target, key) {
-        if (key in lastDelegate) return lastDelegate[key];
-        return target[key];
-      },
-      enumerate(target) {
-        const sourceKeys = Object.keys(target);
-        const proxyKeys = Object.keys(lastDelegate);
-        const add: string[] = [];
-        for (const k of proxyKeys) {
-          if (sourceKeys.indexOf(k) < 0) add.push(k);
+    return (
+      this.__lastProxy ||
+      (this.__lastProxy = new Proxy(<any>this.subject.getValue(), {
+        set(_, key, value) {
+          lastDelegate[key] = value;
+          return true;
+        },
+        get(target, key) {
+          if (key in lastDelegate) return lastDelegate[key];
+          return target[key];
+        },
+        enumerate(target) {
+          const sourceKeys = Object.keys(target);
+          const proxyKeys = Object.keys(lastDelegate);
+          const add: string[] = [];
+          for (const k of proxyKeys) {
+            if (sourceKeys.indexOf(k) < 0) add.push(k);
+          }
+          return [...sourceKeys, ...add];
         }
-        return [...sourceKeys, ...add];
-      }
-    }));
+      }))
+    );
   }
 
   protected update(data: Partial<T> = {}) {
@@ -130,7 +133,7 @@ export abstract class Actions<T> {
         ...this.subject.getValue(),
         ...this.__current
       });
-      this.__current = {};
+      this.__current = <any>{ __stamp: new Date().getTime() };
       this.__lastProxy = undefined;
     });
   }
