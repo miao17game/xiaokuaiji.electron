@@ -1,6 +1,6 @@
-import { Actions, SourceUpdate, Context } from "../../helpers/context";
-import { IFolderStruct } from "../../../../utils/metadata";
-import { CoreService } from "../core.service";
+import { Actions, SourceUpdate, Context } from "../helpers/context";
+import { IFolderStruct } from "../../../utils/metadata";
+import { CoreService } from "../providers/core.service";
 
 interface IDashboardState {
   loading: boolean;

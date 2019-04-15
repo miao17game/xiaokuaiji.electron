@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { ContextCenter } from "../helpers/context";
 import { CoreService } from "./core.service";
-import { DashboardContext as DASHBOARD } from "./models/dashbord.model";
-import { PreferenceContext as PREFERENCE } from "./models/preference.model";
+import { DashboardContext as DASHBOARD } from "../models/dashbord.model";
+import { PreferenceContext as PREFERENCE } from "../models/preference.model";
 
 const observers = { dashboard: DASHBOARD, preference: PREFERENCE };
 

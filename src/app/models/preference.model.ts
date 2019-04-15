@@ -1,6 +1,6 @@
-import { Actions, Context } from "../../helpers/context";
-import { IPreferenceConfig } from "../../../../utils/metadata";
-import { CoreService } from "../core.service";
+import { Actions, Context } from "../helpers/context";
+import { IPreferenceConfig } from "../../../utils/metadata";
+import { CoreService } from "../providers/core.service";
 
 interface IPreferenceState extends IPreferenceConfig {
   init: boolean;
