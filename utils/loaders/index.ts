@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import { IpcMain, BrowserWindow, Event } from "electron";
-import { DefaultEventLoader, IRegisterOptions, createUnknownError, createStamp } from "./base";
+import { IpcMain, BrowserWindow } from "electron";
+import { DefaultEventLoader, createUnknownError, createStamp, Contract } from "./base";
 import { ROOT_FOLDER, PREFERENCE_CONF, OS_HOME } from "../constants/paths";
 import {
   IFilesFetchContext,
@@ -10,6 +10,7 @@ import {
   AppError,
   ErrorCode
 } from "../metadata";
+import { ClientEvent } from "../constants/events";
 
 interface IClientLoader {
   openCloseDevTool(args: {}): void;
@@ -24,6 +25,7 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
     super(ipcMain);
   }
 
+  @Contract(ClientEvent.DebugMode)
   public openCloseDevTool() {
     const devToolOpened = this.win.webContents.isDevToolsOpened();
     if (devToolOpened) {
@@ -33,6 +35,7 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
     }
   }
 
+  @Contract(ClientEvent.FetchFiles)
   public readLocalFiles({ folderPath = undefined, showHideFiles = false, lazyLoad = true }) {
     const folder = connectFolder(folderPath);
     const fies = readFiles({ path: folder, isRoot: true, showHideFiles, lazyLoad });
@@ -44,6 +47,7 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
     };
   }
 
+  @Contract(ClientEvent.InitAppFolder)
   public initAppFolder({ folder = ROOT_FOLDER }) {
     if (fs.existsSync(folder)) return;
     return new Promise<boolean | AppError>((resolve, reject) => {
@@ -51,10 +55,12 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
     });
   }
 
+  @Contract(ClientEvent.FetchPreferences)
   public fetchPreference() {
     return tryLoadPreference();
   }
 
+  @Contract(ClientEvent.UpdatePreferences)
   public updatePreference({ configs = {} }) {
     const { configs: sourceConfs, error: errors } = tryLoadPreference();
     if (errors) {

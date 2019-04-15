@@ -17,7 +17,6 @@ export class IpcPromiseLoader<T extends {} = {}> {
     this.descriptors = Object.getOwnPropertyDescriptors(this);
     const prototype = Object.getPrototypeOf(this);
     const { [REGISTERS]: registers = {} } = prototype;
-    console.log(registers);
     Object.keys(registers).forEach(methodName => {
       const key = registers[methodName].value;
       this.register(key, <any>methodName);
@@ -34,9 +33,7 @@ export class IpcPromiseLoader<T extends {} = {}> {
 
   public register<K extends keyof IpcPromiseLoader | keyof T>(eventKey: string, target: K): IpcPromiseLoader;
   public register(key: string, action: string) {
-    console.log([key, action]);
     if (this.checkProtoMethod(this[action])) {
-      console.log([key, action]);
       const prototype = Object.getPrototypeOf(this);
       const descriptor = Object.getOwnPropertyDescriptor(prototype, action);
       const { [RESOLVES]: resolves = {}, [REJECTS]: rejects = {}, [VALIDATES]: validates = {} } = prototype;

@@ -1,11 +1,7 @@
 import { IpcMain, Event } from "electron";
 import { AppError, ErrorCode } from "../metadata";
 
-export function Override() {
-  return function override(prototype: any, propertyKey: string, descriptor?: any) {
-    // DO NOTHING
-  };
-}
+const REGISTERS = Symbol.for("@registers");
 
 export interface IRegisterOptions {
   sync: boolean;
@@ -16,6 +12,12 @@ export class DefaultEventLoader<C extends any = {}> {
 
   constructor(protected ipcMain: IpcMain) {
     this.descriptors = Object.getOwnPropertyDescriptors(this);
+    const prototype = Object.getPrototypeOf(this);
+    const { [REGISTERS]: registers = {} } = prototype;
+    Object.keys(registers).forEach(methodName => {
+      const key = registers[methodName].value;
+      this.register(key, <any>methodName);
+    });
   }
 
   private checkProtoMethod(target: Function) {
@@ -47,6 +49,16 @@ export class DefaultEventLoader<C extends any = {}> {
     });
     return this;
   }
+}
+
+export function Contract(register: string) {
+  return function register_contract(prototype: any, propertyKey: string) {
+    const proto = prototype;
+    const registers = proto[REGISTERS] || (proto[REGISTERS] = {});
+    registers[propertyKey] = {
+      value: register
+    };
+  };
 }
 
 export function createStamp() {
