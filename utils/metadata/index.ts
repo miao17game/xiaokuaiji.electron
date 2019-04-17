@@ -18,10 +18,25 @@ export interface IPreferenceConfig {
   rootFolder?: string;
 }
 
+export interface IAppFolderInit {
+  folder?: string;
+}
+
+export interface ICopyFileOptions {
+  sourcePath: string;
+  targetPath: string;
+}
+
+export interface IUpdatePreferenceOptions {
+  configs: Partial<IPreferenceConfig>;
+}
+
 export enum ErrorCode {
   Default = -1,
   Unknown = 0,
-  PreferenceNotFound = 1
+  PreferenceNotFound = 1,
+  FileNotFound = 2,
+  FileAlreadyExist = 3
 }
 
 export class AppError<T extends { [prop: string]: any } = any> {

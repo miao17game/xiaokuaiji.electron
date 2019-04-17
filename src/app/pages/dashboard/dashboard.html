@@ -9,9 +9,10 @@
         <normalized-button type="primary" size="small" (click)="initRootFolder()">创建</normalized-button>
       </div>
       <span id="folderEmpty">当前文件夹是空的。</span>
-      <ng-template #folderHeader>
+      <ng-template #folderHeader let-path="path">
         <div class="folder-header-group">
-          <normalized-button type="primary" size="small" [outline]="true">添加文件</normalized-button>
+          <!-- <normalized-button type="primary" size="small" [outline]="true" (click)="addFile()">添加文件</normalized-button> -->
+          <input type="file" (change)="onFileChanged($event, path)" />
         </div>
       </ng-template>
       <ng-template #fileContext let-file="file" let-path="path" let-event="event">

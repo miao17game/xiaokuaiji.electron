@@ -1,4 +1,4 @@
-import { Actions, SourceUpdate, Context } from "../helpers/context";
+import { Actions, Context } from "../helpers/context";
 import { IFolderStruct } from "../../../utils/metadata";
 import { CoreService } from "../providers/core.service";
 
@@ -35,22 +35,23 @@ export class DashboardContext extends Actions<IDashboardState> {
     await this.core.dashboardInit();
   }
 
-  @SourceUpdate()
   public resetLoading(loading = false) {
-    this.last.loading = loading;
+    this.update({ loading });
   }
 
-  @SourceUpdate()
   public async referesh() {
     const newData = await this.core.dashboardFetch();
-    this.last.folders = newData;
+    this.update({ folders: newData });
   }
 
-  @SourceUpdate()
   public async loadPart(currentRef: IFolderStruct) {
     const newData = await this.core.dashboardFetch(currentRef.path);
     currentRef.files = newData.files;
     currentRef.folders = newData.folders;
     currentRef.loaded = true;
+  }
+
+  public async copyFileToFolder(source: string, target: string) {
+    await this.core.copyFile({ sourcePath: source, targetPath: target });
   }
 }

@@ -7,7 +7,7 @@ export interface IRegisterOptions {
   sync: boolean;
 }
 
-export class DefaultEventLoader<C extends any = {}> {
+export class DefaultEventLoader {
   private descriptors: { [p: string]: PropertyDescriptor } = {};
 
   constructor(protected ipcMain: IpcMain) {
@@ -24,17 +24,17 @@ export class DefaultEventLoader<C extends any = {}> {
     return Object.keys(this.descriptors).findIndex(name => this.descriptors[name].value === target);
   }
 
-  public register<K extends keyof DefaultEventLoader | keyof C>(
+  private register<K extends keyof DefaultEventLoader>(
     eventKey: string,
     target: K,
     options?: Partial<IRegisterOptions>
-  ): DefaultEventLoader<C>;
-  public register<I = any, O = void>(
+  ): DefaultEventLoader;
+  private register<I = any, O = void>(
     eventKey: string,
     actions: <E>(inputs: I, event: Event) => O | AppError<E> | Promise<O | AppError<E>>,
     options?: Partial<IRegisterOptions>
-  ): DefaultEventLoader<C>;
-  public register(key: string, action: string | Function, { sync = false } = {}) {
+  ): DefaultEventLoader;
+  private register(key: string, action: string | Function, { sync = false } = {}) {
     const method = sync ? "sendSync" : "send";
     let actions = typeof action === "string" ? this[action] : action;
     if (this.checkProtoMethod(actions)) actions = actions.bind(this);

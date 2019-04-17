@@ -8,19 +8,14 @@ import {
   IFolderStruct as IFileFetchResult,
   IPreferenceConfig,
   AppError,
-  ErrorCode
+  ErrorCode,
+  ICopyFileOptions,
+  IUpdatePreferenceOptions,
+  IAppFolderInit
 } from "../metadata";
 import { ClientEvent } from "../constants/events";
 
-interface IClientLoader {
-  openCloseDevTool(args: {}): void;
-  readLocalFiles(args: IFilesFetchContext): { files: IFileFetchResult };
-  initAppFolder(args: { folder?: string }): Promise<boolean | AppError>;
-  fetchPreference(): { configs?: IPreferenceConfig; error?: AppError };
-  updatePreference(args: { configs: Partial<IPreferenceConfig> }): boolean | AppError;
-}
-
-export class EventLoader extends DefaultEventLoader<IClientLoader> implements IClientLoader {
+export class EventLoader extends DefaultEventLoader {
   constructor(private win: BrowserWindow, ipcMain: IpcMain) {
     super(ipcMain);
   }
@@ -36,7 +31,7 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
   }
 
   @Contract(ClientEvent.FetchFiles)
-  public readLocalFiles({ folderPath = undefined, showHideFiles = false, lazyLoad = true }) {
+  public readLocalFiles({ folderPath = undefined, showHideFiles = false, lazyLoad = true }: IFilesFetchContext) {
     const folder = connectFolder(folderPath);
     const fies = readFiles({ path: folder, isRoot: true, showHideFiles, lazyLoad });
     return {
@@ -47,10 +42,31 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
     };
   }
 
+  @Contract(ClientEvent.CopyFile)
+  public copyFile({ sourcePath, targetPath }: ICopyFileOptions) {
+    if (!fs.existsSync(sourcePath)) {
+      return new AppError(ErrorCode.FileNotFound, "file is not exist", { path: sourcePath });
+    }
+    const fileName = path.basename(sourcePath);
+    const toCopyPath = path.join(targetPath, fileName);
+    return new Promise<boolean | AppError>(resolve => {
+      fs.readFile(sourcePath, { encoding: "binary" }, (error, data) => {
+        if (fs.existsSync(toCopyPath)) {
+          return resolve(new AppError(ErrorCode.FileAlreadyExist, "file is exist", { path: toCopyPath }));
+        }
+        if (error) return resolve(createUnknownError(error));
+        fs.writeFile(toCopyPath, data, { encoding: "binary" }, error => {
+          if (error) return resolve(createUnknownError(error));
+          resolve(true);
+        });
+      });
+    });
+  }
+
   @Contract(ClientEvent.InitAppFolder)
-  public initAppFolder({ folder = ROOT_FOLDER }) {
+  public initAppFolder({ folder = ROOT_FOLDER }: IAppFolderInit) {
     if (fs.existsSync(folder)) return;
-    return new Promise<boolean | AppError>((resolve, reject) => {
+    return new Promise<boolean | AppError>(resolve => {
       fs.mkdir(folder, error => resolve(!error ? true : createUnknownError(error)));
     });
   }
@@ -61,7 +77,7 @@ export class EventLoader extends DefaultEventLoader<IClientLoader> implements IC
   }
 
   @Contract(ClientEvent.UpdatePreferences)
-  public updatePreference({ configs = {} }) {
+  public updatePreference({ configs = {} }: IUpdatePreferenceOptions) {
     const { configs: sourceConfs, error: errors } = tryLoadPreference();
     if (errors) {
       return errors;

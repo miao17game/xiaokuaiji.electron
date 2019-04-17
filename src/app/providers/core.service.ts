@@ -3,7 +3,7 @@ import { Router, NavigationEnd, RouterState, ActivatedRoute } from "@angular/rou
 import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
 import { ClientEvent } from "../../../utils/constants/events";
-import { IFolderStruct, IPreferenceConfig } from "../../../utils/metadata";
+import { IFolderStruct, IPreferenceConfig, ICopyFileOptions } from "../../../utils/metadata";
 import { IpcPromiseLoader, DefineValidate, Contract } from "../helpers/ipc-promise";
 
 interface ICoreContract {
@@ -64,6 +64,11 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     resolve: () => undefined
   })
   public preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void> {
+    return this.promise(configs);
+  }
+
+  @Contract(ClientEvent.CopyFile)
+  public copyFile(configs: ICopyFileOptions): Promise<boolean> {
     return this.promise(configs);
   }
 

@@ -84,7 +84,7 @@ export abstract class Actions<T> {
   protected abstract readonly initial: Partial<T>;
 
   private __subject!: BehaviorSubject<T>;
-  private __lastProxy!: T;
+  // private __lastProxy!: T;
   private __current: Partial<T> = {};
   private __timer: number;
 
@@ -94,32 +94,6 @@ export abstract class Actions<T> {
 
   protected get last() {
     return this.subject.getValue();
-  }
-
-  private initLastProxy(): T {
-    const lastDelegate = this.__current;
-    return (
-      this.__lastProxy ||
-      (this.__lastProxy = new Proxy(<any>this.subject.getValue(), {
-        set(_, key, value) {
-          lastDelegate[key] = value;
-          return true;
-        },
-        get(target, key) {
-          if (key in lastDelegate) return lastDelegate[key];
-          return target[key];
-        },
-        enumerate(target) {
-          const sourceKeys = Object.keys(target);
-          const proxyKeys = Object.keys(lastDelegate);
-          const add: string[] = [];
-          for (const k of proxyKeys) {
-            if (sourceKeys.indexOf(k) < 0) add.push(k);
-          }
-          return [...sourceKeys, ...add];
-        }
-      }))
-    );
   }
 
   protected update(data: Partial<T> = {}) {
@@ -134,7 +108,7 @@ export abstract class Actions<T> {
         ...this.__current
       });
       this.__current = <any>{ __stamp: new Date().getTime() };
-      this.__lastProxy = undefined;
+      // this.__lastProxy = undefined;
     });
   }
 }
@@ -145,21 +119,21 @@ export function Context() {
   };
 }
 
-export function SourceUpdate() {
-  return function source_update<T extends Actions<any>>(
-    prototype: T,
-    propertyKay: string,
-    descriptor: PropertyDescriptor
-  ) {
-    const source = descriptor.value;
-    descriptor.value = async function(this: T, ...args: any[]) {
-      const last = this["initLastProxy"]();
-      await source.call({ ...this, last }, ...args);
-      this["update"]();
-    };
-    Object.defineProperty(prototype, propertyKay, descriptor);
-  };
-}
+// export function SourceUpdate() {
+//   return function source_update<T extends Actions<any>>(
+//     prototype: T,
+//     propertyKay: string,
+//     descriptor: PropertyDescriptor
+//   ) {
+//     const source = descriptor.value;
+//     descriptor.value = async function(this: T, ...args: any[]) {
+//       // const [last, lastProxy] = this["initLastProxy"]();
+//       // await source.call({ ...this, last: lastProxy }, ...args);
+//       // this["update"](last);
+//     };
+//     Object.defineProperty(prototype, propertyKay, descriptor);
+//   };
+// }
 
 export class ContextCenter<T> {
   private _generator: IContextRules<T>;

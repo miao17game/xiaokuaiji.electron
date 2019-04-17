@@ -37,6 +37,13 @@ export class DashboardComponent implements OnInit {
     console.log(path);
   }
 
+  async onFileChanged(event: Event, path) {
+    const sourcePath = ((<any>event.target).files as File[])[0].path;
+    console.log(event, path);
+    await this.actions.copyFileToFolder(sourcePath, path);
+    this.onRefresh();
+  }
+
   onFolderClick(folderRef: IFolderStruct) {
     if (!folderRef.loaded) {
       this.actions.loadPart(folderRef);
