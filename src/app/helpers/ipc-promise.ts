@@ -23,11 +23,11 @@ export class IpcPromiseLoader<T extends {} = {}> {
     });
   }
 
-  protected promise<I = {}, T = void>(send?: I): Promise<T> {
+  protected async<I = {}, T = void>(send?: I): Promise<T> {
     return Promise.resolve(send as any);
   }
 
-  protected send<I = {}, T = void>(send?: I): T {
+  protected sync<I = {}, T = void>(send?: I): T {
     return null as any;
   }
 

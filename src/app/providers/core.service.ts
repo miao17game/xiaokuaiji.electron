@@ -33,14 +33,14 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
 
   @Contract(ClientEvent.DebugMode)
   public debugToolSwitch() {
-    return this.send();
+    return this.sync();
   }
 
   @Contract(ClientEvent.InitAppFolder, {
     resolve: () => undefined
   })
   public dashboardInit() {
-    return this.promise();
+    return this.async();
   }
 
   @Contract(ClientEvent.FetchFiles, {
@@ -48,7 +48,7 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     validate: () => true
   })
   public dashboardFetch(subPath?: string): Promise<IFolderStruct> {
-    return this.promise({ folderPath: subPath, showHideFiles: false, lazyLoad: true });
+    return this.async({ folderPath: subPath, showHideFiles: false, lazyLoad: true });
   }
 
   @Contract(ClientEvent.FetchPreferences, {
@@ -57,19 +57,19 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     validate: ({ error }) => !error
   })
   public preferenceFetch(): Promise<IPreferenceConfig> {
-    return this.promise();
+    return this.async();
   }
 
   @Contract(ClientEvent.UpdatePreferences, {
     resolve: () => undefined
   })
   public preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void> {
-    return this.promise(configs);
+    return this.async(configs);
   }
 
   @Contract(ClientEvent.CopyFile)
   public copyFile(configs: ICopyFileOptions): Promise<boolean> {
-    return this.promise(configs);
+    return this.async(configs);
   }
 
   private getTitle(state: RouterState, parent: ActivatedRoute) {
