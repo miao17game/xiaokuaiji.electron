@@ -40,7 +40,7 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     resolve: () => undefined
   })
   public dashboardInit() {
-    return this.async();
+    return this.async({});
   }
 
   @Contract(ClientEvent.FetchFiles, {
